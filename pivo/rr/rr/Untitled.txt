@@ -1,0 +1,102 @@
+#include <iostream>
+#include <vector>
+#include <stack>
+
+using namespace std;
+
+// Функция для выполнения поиска в глубину
+void dfs(int vertex, const vector<vector<int>>& graph, vector<bool>& visited, stack<int>& query) {
+    visited[vertex] = true; // Помечаем текущую вершину как посещенную
+    cout << "Visited vertex: " << vertex << endl;
+    query.push(vertex);
+
+    // Проверяем все возможные ребра из текущей вершины
+    for (int i = 0; i < graph[0].size(); ++i) { // итерируем по всем ребрам
+        if (graph[vertex][i] == 1) { // если ребро инцидентно текущей вершине
+            int nextVertex = -1;
+            // Находим вершину, связанную с этим ребром
+            for (int j = 0; j < graph.size(); ++j) {
+                if (graph[j][i] == -1) { // если вершина "исходит" из текущей
+                    nextVertex = j;
+                    break;
+                }
+            }
+            // Рекурсивно вызываем DFS для следующей вершины, если она еще не посещена
+            if (nextVertex != -1 && !visited[nextVertex]) {
+                dfs(nextVertex, graph, visited, query);
+            }
+        }
+    }
+}
+
+vector<vector<int>> GraphTrans(const vector<vector<int>>& graph) {
+    unsigned long int numVertices = graph.size();
+    unsigned long int numEdges = graph[0].size();
+    
+    vector<vector<int>> transGraph(numEdges, vector<int>(numVertices, 0));
+
+    // Проходим по старой матрице и заполняем транспонированную
+    for (int i = 0; i < numVertices; ++i) {
+        for (int j = 0; j < numEdges; ++j) {
+            if (graph[i][j] != 0) {
+                // Если в старой матрице значение ненулевое, то
+                // в транспонированной матрице мы ставим 1
+                // в соответствующие позиции
+                if(graph[i][j] == -1)
+                    transGraph[j][i] = 1; // Меняем местами индексы
+                else
+                    transGraph[j][i] = -1;
+            }
+        }
+    }
+
+    return transGraph;
+}
+
+int main() {
+    int i;
+    stack<int> query;
+    vector<vector<int>> graph = {
+        {1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0},
+        {-1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 1, -1, 0, 1, 1, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 1, -1, 1, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, -1},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1}
+    };
+    
+    unsigned long int numVertices = graph.size();
+    vector<bool> visited(numVertices, false); // Вектор для отслеживания посещенных вершин
+    
+    // граф
+    for (i = 0; i < numVertices; ++i) {
+        if (!visited[i]) {
+            dfs(i, graph, visited, query);
+        }
+    }
+    
+    cout << "\n" << "\n";
+    
+//    транс граф
+    
+    vector<vector<int>> transGraph = GraphTrans(graph);
+    
+    unsigned long int numVTrans = transGraph.size();
+    vector<bool> visitedTrans(numVTrans, false);
+    
+    for (i = 0; i < numVertices; ++i) {
+        if (!visitedTrans[i]) {
+            dfs(query.top(), transGraph, visitedTrans, query);
+            query.pop();
+            cout << "penis \n";
+        }
+    }
+    cout << "\n" << "\n";
+    
+    return 0;
+}
+

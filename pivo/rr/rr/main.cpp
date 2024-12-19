@@ -6,23 +6,22 @@
 
 using namespace std;
 
-// Глобальные переменные
-vector<vector<int>> adj;          // Список смежности графа
-vector<vector<int>> condensedAdj; // Список смежности конденсированного графа
-vector<int> disc, low, component; // Время обнаружения, минимальное достижимое время, компоненты
-vector<bool> inStack;             // Проверка нахождения вершины в стеке
-stack<int> st;                    // Стек для алгоритма Тарьяна
-int timer = 0;                    // Счетчик времени
+vector<vector<int>> adj;
+vector<vector<int>> condensedAdj;
+vector<int> disc, low, component;
+vector<bool> inStack;
+stack<int> st;
+int timer = 0;
 
 // Функция для нахождения сильносвязных компонент (алгоритм Тарьяна)
-void tarjanDFS(int v, vector<vector<int>>& sccs) {
+void Scc(int v, vector<vector<int>>& sccs) {
     disc[v] = low[v] = ++timer;
     st.push(v);
     inStack[v] = true;
 
     for (int u : adj[v]) {
         if (disc[u] == -1) {
-            tarjanDFS(u, sccs);
+            Scc(u, sccs);
             low[v] = min(low[v], low[u]);
         } else if (inStack[u]) {
             low[v] = min(low[v], disc[u]);
@@ -44,7 +43,7 @@ void tarjanDFS(int v, vector<vector<int>>& sccs) {
 }
 
 // Построение конденсированного графа
-void buildCondensedGraph(int V, const vector<vector<int>>& sccs) {
+void CondGraph(int V, const vector<vector<int>>& sccs) {
     set<pair<int, int>> edges;
 
     for (int v = 0; v < V; ++v) {
@@ -66,43 +65,41 @@ int main() {
     cout << "Введите количество вершин и рёбер: ";
     cin >> V >> E;
 
-    vector<vector<int>> incidenceMatrix(V, vector<int>(E, 0));
+    vector<vector<int>> graph(V, vector<int>(E, 0));
     cout << "Введите матрицу инцидентности (вершины исходят из -1, входят в +1):" << endl;
     for (int i = 0; i < V; ++i) {
         for (int j = 0; j < E; ++j) {
-            cin >> incidenceMatrix[i][j];
+            cin >> graph[i][j];
         }
     }
 
-    // Построение списка смежности из матрицы инцидентности
+
     adj.resize(V);
     for (int j = 0; j < E; ++j) {
         int from = -1, to = -1;
         for (int i = 0; i < V; ++i) {
-            if (incidenceMatrix[i][j] == -1) from = i;
-            if (incidenceMatrix[i][j] == 1) to = i;
+            if (graph[i][j] == -1) from = i;
+            if (graph[i][j] == 1) to = i;
         }
         if (from != -1 && to != -1) {
             adj[from].push_back(to);
         }
     }
 
-    // Инициализация глобальных переменных
     disc.assign(V, -1);
     low.assign(V, -1);
     component.assign(V, -1);
     inStack.assign(V, false);
     vector<vector<int>> sccs;
 
-    // Поиск сильносвязных компонент
     for (int i = 0; i < V; ++i) {
         if (disc[i] == -1) {
-            tarjanDFS(i, sccs);
+            Scc(i, sccs);
         }
     }
 
     // Построение конденсированного графа
-    buildCondensedGraph(V, sccs);
+    CondGraph(V, sccs);
 
     // Вывод сильносвязных компонент
     cout << "Сильносвязные компоненты:" << endl;

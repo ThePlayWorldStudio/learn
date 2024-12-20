@@ -43,8 +43,9 @@ void Scc(int v, vector<vector<int>>& sccs) {
 }
 
 // Построение конденсированного графа
+set<pair<int, int>> edges;
 void CondGraph(int V, const vector<vector<int>>& sccs) {
-    set<pair<int, int>> edges;
+    edges.clear(); // Очистка предыдущих данных
 
     for (int v = 0; v < V; ++v) {
         for (int u : adj[v]) {
@@ -73,7 +74,6 @@ int main() {
         }
     }
 
-
     adj.resize(V);
     for (int j = 0; j < E; ++j) {
         int from = -1, to = -1;
@@ -101,21 +101,20 @@ int main() {
     // Построение конденсированного графа
     CondGraph(V, sccs);
 
-    // Вывод сильносвязных компонент
-    cout << "Сильносвязные компоненты:" << endl;
-    for (const auto& scc : sccs) {
-        for (int v : scc) {
-            cout << v << " ";
-        }
-        cout << endl;
+    // Формирование матрицы инцидентности для конденсированного графа
+    vector<vector<int>> condensedIncidence(condensedAdj.size(), vector<int>(edges.size(), 0));
+    int edgeIndex = 0;
+    for (auto& edge : edges) {
+        condensedIncidence[edge.first][edgeIndex] = -1;
+        condensedIncidence[edge.second][edgeIndex] = 1;
+        edgeIndex++;
     }
 
-    // Вывод конденсированного графа
-    cout << "Конденсированный граф (список смежности):" << endl;
-    for (int i = 0; i < condensedAdj.size(); ++i) {
-        cout << i << ": ";
-        for (int v : condensedAdj[i]) {
-            cout << v << " ";
+    // Вывод матрицы инцидентности конденсированного графа
+    cout << "Матрица инцидентности конденсированного графа:" << endl;
+    for (int i = 0; i < condensedIncidence.size(); ++i) {
+        for (int j = 0; j < condensedIncidence[i].size(); ++j) {
+            cout << condensedIncidence[i][j] << " ";
         }
         cout << endl;
     }

@@ -6,25 +6,24 @@
 
 using namespace std;
 
-vector<vector<int>> adj;
-vector<vector<int>> condensedAdj;
 vector<int> disc, low, component;
 vector<bool> inStack;
 stack<int> st;
 int timer = 0;
 
-// Функция для нахождения сильносвязных компонент (алгоритм Тарьяна)
-void Scc(int v, vector<vector<int>>& sccs) {
+void Scc(int v, const vector<vector<int>>& SmMatr, vector<vector<int>>& sccs) {
     disc[v] = low[v] = ++timer;
     st.push(v);
     inStack[v] = true;
 
-    for (int u : adj[v]) {
-        if (disc[u] == -1) {
-            Scc(u, sccs);
-            low[v] = min(low[v], low[u]);
-        } else if (inStack[u]) {
-            low[v] = min(low[v], disc[u]);
+    for (int u = 0; u < SmMatr.size(); ++u) {
+        if (SmMatr[v][u] != 0) {
+            if (disc[u] == -1) {
+                Scc(u, SmMatr, sccs);
+                low[v] = min(low[v], low[u]);
+            } else if (inStack[u]) {
+                low[v] = min(low[v], disc[u]);
+            }
         }
     }
 
@@ -42,22 +41,16 @@ void Scc(int v, vector<vector<int>>& sccs) {
     }
 }
 
-// Построение конденсированного графа
 set<pair<int, int>> edges;
-void CondGraph(int V, const vector<vector<int>>& sccs) {
-    edges.clear(); // Очистка предыдущих данных
+void CondGraph(int V, const vector<vector<int>>& adjMatrix, const vector<vector<int>>& sccs) {
+    edges.clear();
 
     for (int v = 0; v < V; ++v) {
-        for (int u : adj[v]) {
-            if (component[v] != component[u]) {
+        for (int u = 0; u < adjMatrix.size(); ++u) {
+            if (adjMatrix[v][u] != 0 && component[v] != component[u]) {
                 edges.insert({component[v], component[u]});
             }
         }
-    }
-
-    condensedAdj.resize(sccs.size());
-    for (auto& edge : edges) {
-        condensedAdj[edge.first].push_back(edge.second);
     }
 }
 
@@ -66,23 +59,23 @@ int main() {
     cout << "Введите количество вершин и рёбер: ";
     cin >> V >> E;
 
-    vector<vector<int>> graph(V, vector<int>(E, 0));
+    vector<vector<int>> incidenceMatrix(V, vector<int>(E, 0));
     cout << "Введите матрицу инцидентности (вершины исходят из -1, входят в +1):" << endl;
     for (int i = 0; i < V; ++i) {
         for (int j = 0; j < E; ++j) {
-            cin >> graph[i][j];
+            cin >> incidenceMatrix[i][j];
         }
     }
 
-    adj.resize(V);
+    vector<vector<int>> MatrSm(V, vector<int>(V, 0));
     for (int j = 0; j < E; ++j) {
         int from = -1, to = -1;
         for (int i = 0; i < V; ++i) {
-            if (graph[i][j] == -1) from = i;
-            if (graph[i][j] == 1) to = i;
+            if (incidenceMatrix[i][j] == -1) from = i;
+            if (incidenceMatrix[i][j] == 1) to = i;
         }
         if (from != -1 && to != -1) {
-            adj[from].push_back(to);
+            MatrSm[from][to] = 1;
         }
     }
 
@@ -94,27 +87,24 @@ int main() {
 
     for (int i = 0; i < V; ++i) {
         if (disc[i] == -1) {
-            Scc(i, sccs);
+            Scc(i, MatrSm, sccs);
         }
     }
 
-    // Построение конденсированного графа
-    CondGraph(V, sccs);
+    CondGraph(V, MatrSm, sccs);
 
-    // Формирование матрицы инцидентности для конденсированного графа
-    vector<vector<int>> condensedIncidence(condensedAdj.size(), vector<int>(edges.size(), 0));
-    int edgeIndex = 0;
+    vector<vector<int>> incMatr(sccs.size(), vector<int>(edges.size(), 0));
+    int index = 0;
     for (auto& edge : edges) {
-        condensedIncidence[edge.first][edgeIndex] = -1;
-        condensedIncidence[edge.second][edgeIndex] = 1;
-        edgeIndex++;
+        incMatr[edge.first][index] = -1;
+        incMatr[edge.second][index] = 1;
+        index++;
     }
 
-    // Вывод матрицы инцидентности конденсированного графа
     cout << "Матрица инцидентности конденсированного графа:" << endl;
-    for (int i = 0; i < condensedIncidence.size(); ++i) {
-        for (int j = 0; j < condensedIncidence[i].size(); ++j) {
-            cout << condensedIncidence[i][j] << " ";
+    for (int i = 0; i < incMatr.size(); ++i) {
+        for (int j = 0; j < incMatr[i].size(); ++j) {
+            cout << incMatr[i][j] << " ";
         }
         cout << endl;
     }

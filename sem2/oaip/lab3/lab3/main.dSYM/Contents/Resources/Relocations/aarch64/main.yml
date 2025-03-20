@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/egor/Documents/programming/labs/gti/learn/sem2/oaip/lab3/lab3/main'
+relocations:     []
+...

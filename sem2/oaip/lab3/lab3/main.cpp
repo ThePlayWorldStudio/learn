@@ -1,4 +1,5 @@
 #include <iostream>
+#include <time.h>
 
 using namespace std;
 
@@ -41,23 +42,29 @@ public:
     }
     
     void maximilian(){
-        Node* curr = head->bef;
-        Node* maxim = head;
         
-        while(curr){
-            if(curr->value > maxim->value)
-                maxim = curr;
-            curr = curr->bef;
-        }
-        
-        curr = head;
-        while(curr){
-            if(curr->bef == maxim){
-                curr->bef = maxim->bef;
-                delete maxim;
-                return;
+        if(head){
+            Node* newN = new Node;
+            newN->bef = head;
+            Node* curr = newN;
+            Node* maxim = newN;
+            
+            while(curr->bef){
+                if(curr->bef->value > maxim->bef->value)
+                    maxim = curr;
+                curr = curr->bef;
             }
-            curr = curr->bef;
+            
+            if(maxim == newN)
+                head = head->bef;
+            Node* temp = maxim->bef;
+            maxim->bef = maxim->bef->bef;
+            delete newN;
+            delete temp;
+            
+            cout << "всё\n" << endl;
+        } else {
+            cout << " stack is empty";
         }
     }
     
@@ -80,6 +87,7 @@ public:
 
 int main() {
     Stak bruh;
+    srand(time(NULL));
     
     int iche, num;
     bool iswork = true;
@@ -96,8 +104,9 @@ int main() {
                 break;
             }
             case 1:{
+                int x = rand()%100;
                 bruh.push(rand()%100+1);
-                cout << "всё" << endl;
+                cout << "всё\n" << endl;
                 break;
             }
             case 2:{
@@ -106,7 +115,6 @@ int main() {
             }
             case 3:{
                 bruh.maximilian();
-                cout << "всё" << endl;
                 break;
             }
             case 4:{

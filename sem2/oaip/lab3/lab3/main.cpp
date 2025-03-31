@@ -70,8 +70,39 @@ public:
         }
     }
     
+    Stak draw(){
+        Stak ret;
+        
+        
+        Node* curr = head;
+        
+        while(curr){
+            if(curr->value%2==0){
+                ret.push(curr->value);
+            }
+            curr = curr->bef;
+        }
+        
+        Node* curr2 = ret.head;
+        
+        while(curr2){
+            cout << curr2->value << " ";
+            curr2 = curr2->bef;
+        }
+        
+        delete curr;
+        delete curr2;
+        return ret;
+    }
+    
     void printall(){
         Node* curr = head;
+        
+        while(curr){
+            cout << curr->value << " ";
+            curr = curr->bef;
+        }
+        
         while(curr){
             cout << curr->value << " ";
             curr = curr->bef;
@@ -94,7 +125,7 @@ int main() {
     int iche, num;
     bool iswork = true;
     
-    cout << "0. добавить число в стек\n 1. добавить случайное число в стек\n 2. посмотреть числа в стеке\n 3. удалить максимальное значение\n 4. выйти \n\n";
+    cout << "0. добавить число в стек\n 1. добавить случайное число в стек\n 2. посмотреть числа в стеке\n 3. удалить максимальное значение\n 4. чётное 5. выход\n\n";
     
     while(iswork){
         cin >> iche;
@@ -106,7 +137,6 @@ int main() {
                 break;
             }
             case 1:{
-                int x = rand()%100;
                 bruh.push(rand()%100+1);
                 cout << "всё\n" << endl;
                 break;
@@ -120,6 +150,11 @@ int main() {
                 break;
             }
             case 4:{
+                bruh.draw();
+                break;
+            }
+                
+            case 5:{
                 iswork = false;
             }
             default:

@@ -3,12 +3,14 @@
 
 using namespace std;
 
-class Stak{
+struct Node{
+    int value;
+    Node* bef = NULL;
+};
+
+class Stak: public Node{
 private:
-    struct Node{
-        int value;
-        Node* bef = NULL;
-    };
+    
     Node* head = NULL;
     
 public:

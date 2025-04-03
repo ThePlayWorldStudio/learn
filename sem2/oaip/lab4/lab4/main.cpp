@@ -49,7 +49,7 @@ public:
         if(last&&first){
             Node* temp = last;
             last = last->prev;
-//            last->next = NULL;
+            last->next = NULL;
             delete temp;
             return 0;
         }
@@ -63,6 +63,7 @@ public:
         if(first&&last){
             Node* temp = first;
             first = first->next;
+            first->prev = NULL;
             delete temp;
             return 0;
         }
@@ -70,6 +71,16 @@ public:
             cout << "stack is empty\n";
             return -1;
         }
+    }
+    
+    int count(){
+        int num = 0;
+        Node* curr = first;
+        while(curr){
+            num++;
+            curr = curr->next;
+        }
+        return num;
     }
     
     void printallfir(){
@@ -120,21 +131,37 @@ public:
     void megaswap(){
         
         if(first){
-            first->next->prev = last;
-            last->prev->next = first;
-            
-            last->next = first->next;
-            first->prev = last->prev;
-            
-            last->prev = NULL;
-            first->next = NULL;
-            
-            Node* temp = first;
-            first = last;
-            last = temp;
-            
+            if(count()==1){
+                return;
+            }
+            if(count()==2){
+                Node* temp = first;
+                first->prev = last;
+                last->next = temp;
+                first->next = NULL;
+                last->prev = NULL;
+                
+                temp = first;
+                first = last;
+                last = temp;
+                return ;
+            }else{
+                first->next->prev = last;
+                last->prev->next = first;
+                
+                last->next = first->next;
+                first->prev = last->prev;
+                
+                last->prev = NULL;
+                first->next = NULL;
+                
+                Node* temp = first;
+                first = last;
+                last = temp;
+                return;
+            }
         }else{
-            cout << "stack is not empty!";
+            cout << "stack is empty!";
         }
         cout << endl;
     }

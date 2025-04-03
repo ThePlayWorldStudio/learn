@@ -46,9 +46,10 @@ public:
     }
     
     int popback(){
-        if(last){
+        if(last&&first){
             Node* temp = last;
             last = last->prev;
+//            last->next = NULL;
             delete temp;
             return 0;
         }
@@ -59,9 +60,9 @@ public:
     }
     
     int popfront(){
-        if(first){
+        if(first&&last){
             Node* temp = first;
-            first = first->prev;
+            first = first->next;
             delete temp;
             return 0;
         }
@@ -71,11 +72,20 @@ public:
         }
     }
     
-    void printall(){
+    void printallfir(){
         Node* curr = first;
         while(curr){
             cout << curr->value << " ";
             curr = curr->next;
+        }
+        cout << endl;
+    }
+    
+    void printalllast(){
+        Node* curr = last;
+        while(curr){
+            cout << curr->value << " ";
+            curr = curr->prev;
         }
         cout << endl;
     }
@@ -107,6 +117,28 @@ public:
         }
     }
     
+    void megaswap(){
+        
+        if(first){
+            first->next->prev = last;
+            last->prev->next = first;
+            
+            last->next = first->next;
+            first->prev = last->prev;
+            
+            last->prev = NULL;
+            first->next = NULL;
+            
+            Node* temp = first;
+            first = last;
+            last = temp;
+            
+        }else{
+            cout << "stack is not empty!";
+        }
+        cout << endl;
+    }
+    
     ~Queue(){
         while(last){
             popback();
@@ -123,8 +155,10 @@ int main() {
     int iche, value;
     bool isWork = true;
     
+    cout << "0: pushback \n 1: popback \n 2: pushfront \n 3: popfront \n 4: printall first -> last 7: printall last -> first \n 6: maximilian \n 7: exit \n";
+    
     while(isWork){
-        
+    
         cin >> iche;
         
         switch (iche){
@@ -143,15 +177,19 @@ int main() {
             case 3:
                 queue.popfront();
                 break;
-            
             case 4:
-                queue.printall();
+                queue.printallfir();
                 break;
-                
             case 5:
-                queue.maximilian();
+                queue.printalllast();
                 break;
             case 6:
+                queue.maximilian();
+                break;
+            case 7:
+                queue.megaswap();
+                break;
+            case 8:
                 isWork = false;
                 break;
                 

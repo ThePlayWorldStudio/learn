@@ -1,25 +1,30 @@
 #ifndef TREE_H
 #define TREE_H
-#include <vector>
+#include <string>
+
+using namespace std;
 
 struct Node{
 	int value;
 	bool IsLeaf;
-	Node* child[4];
+	Node* tl;
+	Node* bl;
+	Node* br;
+	Node* tr;
 	Node(int val, bool stat);
 	~Node();
 };
 
-class Tree: public Node{
+class Tree{
 public:
-	bool IsSame(int** matrix, int startx, int endx, int starty, int endy);
+	static bool IsSame(int** matrix, int startx, int endx, int starty, int endy);
 
-	Node* buildTree(int** matrix, int startx, int endx, int starty, int endy, int ind, int depth);
+	static Node* buildTree(int** matrix, int startx, int endx, int starty, int endy, const string name, int depth);
 	
-	void buildMatrix(Node* root, int** matrix, int startx, int endx, int starty, int endy);
+	static void buildMatrix(Node* root, int** matrix, int startx, int endx, int starty, int endy);
 
-	void deleteTree(Node* root);
+	static void deleteTree(Node* root);
 
-	void printTree(Node* root, int depth);
+	static void printTree(Node* root, int depth);
 };
 #endif

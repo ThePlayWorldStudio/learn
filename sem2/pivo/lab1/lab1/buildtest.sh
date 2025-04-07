@@ -1,1 +1,1 @@
-g++ src/tests.cpp -o test -lgtest -lgmock -pthread src/Tree.cpp
+g++ src/tests.cpp -o test -lgtest -lgmock src/Tree.cpp

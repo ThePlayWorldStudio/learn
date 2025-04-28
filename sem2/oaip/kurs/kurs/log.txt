@@ -1,0 +1,2 @@
+Name:          type                time                kallories           description                                                                                         
+hwet           |	напиток      	|34                  |	623       |	we re rwe r                                                                                         

@@ -118,37 +118,6 @@ void sort_for_print(Recipe *dishes, int num){
         }
     }
 }
-    
-void print(FILE *file){
-    file = fopen("recipes.bin", "rb");
-    FILE* log = fopen("log.txt", "w");
-    if(!file){
-        cout << "Open file error!\n";
-        return;
-    }
-    fprintf(stdout, "%-15s%-20s%-20s%-20s%-100s\n", "Name:", "type", "time", "kallories", "description");
-    fprintf(log, "%-15s%-20s%-20s%-20s%-100s\n", "Name:", "type", "time", "kallories", "description");
-
-    fseek(file, 0, SEEK_END);
-    int num = (int)(ftell(file)/sizeof(Recipe));
-    fseek(file, 0, SEEK_SET);
-    
-    Recipe *dishes = new Recipe[num];
-    
-    for(int i = 0; i<num; i++){
-        fread(&dishes[i], sizeof(Recipe), 1, file);
-    }
-    
-    sort_for_print(dishes, num);
-    
-    for(int i = 0; i < num; i++) {
-        fprintf(stdout, "%-15s|\t%-20s\t|%-20d|\t%-10d|\t%-100s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall, dishes[i].description);
-        fprintf(log, "%-15s|\t%-20s\t|%-20d|\t%-10d|\t%-100s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall, dishes[i].description);
-    }
-    fclose(file);
-    fclose(log);
-    delete [] dishes;
-}
 
 void bubblesort(Recipe *dishes, int num){
     for(int i = 0; i < num-1; i++){
@@ -160,37 +129,6 @@ void bubblesort(Recipe *dishes, int num){
             }
         }
     }
-}
-
-void bubblesortprint(FILE *file){
-    file = fopen("recipes.bin", "rb");
-    FILE* log = fopen("log.txt", "w");
-    if(!file){
-        cout << "Open file error!\n";
-        return;
-    }
-    fprintf(stdout, "%-15s%-20s%-20s%-20s%-100s\n", "Name:", "type", "time", "kallories", "description");
-    fprintf(log, "%-15s%-20s%-20s%-20s%-100s\n", "Name:", "type", "time", "kallories", "description");
-
-    fseek(file, 0, SEEK_END);
-    int num = (int)(ftell(file)/sizeof(Recipe));
-    fseek(file, 0, SEEK_SET);
-    
-    Recipe *dishes = new Recipe[num];
-    
-    for(int i = 0; i<num; i++){
-        fread(&dishes[i], sizeof(Recipe), 1, file);
-    }
-    
-    bubblesort(dishes, num);
-    
-    for(int i = 0; i < num; i++) {
-        fprintf(stdout, "%-15s|\t%-20s\t|%-20d|\t%-10d|\t%-100s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall, dishes[i].description);
-        fprintf(log, "%-15s|\t%-20s\t|%-20d|\t%-10d|\t%-100s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall, dishes[i].description);
-    }
-    fclose(file);
-    fclose(log);
-    delete [] dishes;
 }
 
 int partition(Recipe *dishes, int start, int end)
@@ -230,37 +168,6 @@ void quicksort(Recipe *dishes, int start, int end)
     quicksort(dishes, pivot + 1, end);
 }
 
-void quicksortprint(FILE *file){
-    file = fopen("recipes.bin", "rb");
-    FILE* log = fopen("log.txt", "w");
-    if(!file){
-        cout << "Open file error!\n";
-        return;
-    }
-    fprintf(stdout, "%-15s%-20s%-20s%-20s%-100s\n", "Name:", "type", "time", "kallories", "description");
-    fprintf(log, "%-15s%-20s%-20s%-20s%-100s\n", "Name:", "type", "time", "kallories", "description");
-
-    fseek(file, 0, SEEK_END);
-    int num = (int)(ftell(file)/sizeof(Recipe));
-    fseek(file, 0, SEEK_SET);
-    
-    Recipe *dishes = new Recipe[num];
-    
-    for(int i = 0; i<num; i++){
-        fread(&dishes[i], sizeof(Recipe), 1, file);
-    }
-    fseek(file, 0, SEEK_SET);
-    quicksort(dishes, 0, num-1);
-    
-    for(int i = 0; i < num; i++) {
-        fprintf(stdout, "%-15s|\t%-20s\t|%-20d|\t%-10d|\t%-100s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall, dishes[i].description);
-        fprintf(log, "%-15s|\t%-20s\t|%-20d|\t%-10d|\t%-100s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall, dishes[i].description);
-    }
-    fclose(file);
-    fclose(log);
-    delete [] dishes;
-}
-
 void selectionSort(Recipe *dishes, int n) {
     for (int i = 0; i < n - 1; i++) {
         int minIndex = i;
@@ -274,37 +181,6 @@ void selectionSort(Recipe *dishes, int n) {
         dishes[minIndex].time = dishes[i].time;
         dishes[i].time = temp;
     }
-}
-
-void selectionprint(FILE *file){
-    file = fopen("recipes.bin", "rb");
-    FILE* log = fopen("log.txt", "w");
-    if(!file){
-        cout << "Open file error!\n";
-        return;
-    }
-    fprintf(stdout, "%-15s%-20s%-20s%-20s%-100s\n", "Name:", "type", "time", "kallories", "description");
-    fprintf(log, "%-15s%-20s%-20s%-20s%-100s\n", "Name:", "type", "time", "kallories", "description");
-
-    fseek(file, 0, SEEK_END);
-    int num = (int)(ftell(file)/sizeof(Recipe));
-    fseek(file, 0, SEEK_SET);
-    
-    Recipe *dishes = new Recipe[num];
-    
-    for(int i = 0; i<num; i++){
-        fread(&dishes[i], sizeof(Recipe), 1, file);
-    }
-    fseek(file, 0, SEEK_SET);
-    selectionSort(dishes, num);
-    
-    for(int i = 0; i < num; i++) {
-        fprintf(stdout, "%-15s|\t%-20s\t|%-20d|\t%-10d|\t%-100s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall, dishes[i].description);
-        fprintf(log, "%-15s|\t%-20s\t|%-20d|\t%-10d|\t%-100s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall, dishes[i].description);
-    }
-    fclose(file);
-    fclose(log);
-    delete [] dishes;
 }
 
 void delEl(FILE *file){
@@ -435,44 +311,6 @@ void edit(FILE *file){
     delete [] dishes;
 }
 
-void linearsearch(FILE *file){
-    char name[100];
-
-    FILE* log = fopen("log.txt", "w");
-    file = fopen("recipes.bin", "rb");
-    if(!file){
-        cout << "Open file error!\n";
-        return;
-    }
-    
-    fseek(file, 0, SEEK_END);
-    int num = (int)(ftell(file)/sizeof(Recipe));
-    fseek(file, 0, SEEK_SET);
-    
-    Recipe *dishes = new Recipe[num];
-    
-    for(int i = 0; i<num; i++){
-        fread(&dishes[i], sizeof(Recipe), 1, file);
-    }
-    fseek(file, 0, SEEK_SET);
-    fclose(file);
-    
-    cout << "Введите название рецепта: ";
-    cin.ignore();
-    cin.getline(name, 90);
-    
-    for(int i = 0; i<num; i++){
-        if(strcmp(dishes[i].name, name)==0){
-            fprintf(stdout, "%-15s|\t%-20s\t|%-20d|\t%-10d|\t%-100s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall,dishes[i].description);
-            fprintf(log, "%-15s|\t%-20s\t|%-20d|\t%-10d|\t%-100s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall, dishes[i].description);
-            delete [] dishes;
-            return;
-        }
-    }
-    cout << "not found";
-    delete [] dishes;
-}
-
 void interpolationSearch(Recipe *dishes, int n, int x, FILE *log) {
     int low = 0, high = n - 1;
     bool problem = true;
@@ -498,36 +336,6 @@ void interpolationSearch(Recipe *dishes, int n, int x, FILE *log) {
     if(problem){
         cout << "not found";
     }
-}
-
-void interpolatedprint(FILE *file){
-    int kal;
-
-    FILE* log = fopen("log.txt", "w");
-    file = fopen("recipes.bin", "rb");
-    if(!file){
-        cout << "Open file error!\n";
-        return;
-    }
-    
-    fseek(file, 0, SEEK_END);
-    int num = (int)(ftell(file)/sizeof(Recipe));
-    fseek(file, 0, SEEK_SET);
-    
-    Recipe *dishes = new Recipe[num];
-    
-    for(int i = 0; i<num; i++){
-        fread(&dishes[i], sizeof(Recipe), 1, file);
-    }
-    fseek(file, 0, SEEK_SET);
-    fclose(file);
-    
-    cout << "Введите калории рецепта: ";
-    cin >> kal;
-    quicksort(dishes, 0, num-1);
-    interpolationSearch(dishes, num, kal, log);
-    
-    delete [] dishes;
 }
 
 void dietprint(FILE *file){
@@ -570,19 +378,98 @@ void printMessage(){
     std::cout << "Меню\n1 - создать файл\n2 - Просмотр записей из файла.\n 3 - Добавление записей в файл.\n 4 - Редактирование записей в файле.\n5 - Удаление записей в файле.\n 6 - сортировка пузырьком по названию 13 - Выход.\n";
 }
 
+void printop(FILE* file, int WhatToDo){
+    bool isSort = false;
+
+    file = fopen("recipes.bin", "rb");
+    FILE* log = fopen("log.txt", "w");
+    if(!file){
+        cout << "Open file error!\n";
+        return;
+    }
+    fprintf(stdout, "%-15s%-20s%-20s%-20s%-100s\n", "Name:", "type", "time", "kallories", "description");
+    fprintf(log, "%-15s%-20s%-20s%-20s%-100s\n", "Name:", "type", "time", "kallories", "description");
+
+    fseek(file, 0, SEEK_END);
+    int num = (int)(ftell(file)/sizeof(Recipe));
+    fseek(file, 0, SEEK_SET);
+    
+    Recipe *dishes = new Recipe[num];
+    
+    for(int i = 0; i<num; i++){
+        fread(&dishes[i], sizeof(Recipe), 1, file);
+    }
+
+    switch (WhatToDo)
+    {
+        case 5:
+            sort_for_print(dishes, num);
+            isSort = true;
+            break;
+        case 6:
+            bubblesort(dishes, num);
+            isSort = true;
+            break;
+        case 7:
+            quicksort(dishes, 0, num-1);
+            isSort = true;
+            break;
+        case 8:
+            selectionSort(dishes, num);
+            isSort = true;
+            break;
+        case 9:
+            char name[100];
+
+            cout << "Введите название рецепта: ";
+            cin.ignore();
+            cin.getline(name, 90);
+
+            for(int i = 0; i<num; i++){
+                if(strcmp(dishes[i].name, name)==0){
+                    fprintf(stdout, "%-15s|\t%-20s\t|%-20d|\t%-10d|\t%-100s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall,dishes[i].description);
+                    fprintf(log, "%-15s|\t%-20s\t|%-20d|\t%-10d|\t%-100s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall, dishes[i].description);
+                    delete [] dishes;
+                    return;
+                }
+            }
+            cout << "not found";
+            break;
+
+        case 10:
+            int kal;
+
+            cout << "Введите калории рецепта: ";
+            cin >> kal;
+            quicksort(dishes, 0, num-1);
+            interpolationSearch(dishes, num, kal, log);
+        }
+
+        if(isSort){
+                for(int i = 0; i < num; i++) {
+                    fprintf(stdout, "%-15s|\t%-20s\t|%-20d|\t%-10d|\t%-100s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall, dishes[i].description);
+                    fprintf(log, "%-15s|\t%-20s\t|%-20d|\t%-10d|\t%-100s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall, dishes[i].description);
+                }
+            fclose(file);
+            fclose(log);
+        }
+        delete [] dishes;
+    
+}
+
 int main() {
-    int iChe;
+    int WhatToDo;
     bool isWork = true;
     FILE* file = nullptr;
     while(isWork){
-        cin >> iChe;
-        switch (iChe) {
+        cin >> WhatToDo;
+        switch (WhatToDo) {
             case 1:
                 create(file);
                 break;
             
-            case 3:
-                print(file);
+            case 5:
+                printop(file, WhatToDo);
                 break;
             
             case 2:
@@ -593,28 +480,28 @@ int main() {
                 delEl(file);
                 break;
                 
-            case 5:
+            case 3:
                 edit(file);
                 break;
                 
             case 6:
-                bubblesortprint(file);
+                printop(file, WhatToDo);
                 break;
                 
             case 7:
-                quicksortprint(file);
+                printop(file, WhatToDo);
                 break;
                 
             case 8:
-                selectionprint(file);
+                printop(file, WhatToDo);
                 break;
                 
             case 9:
-                linearsearch(file);
+                printop(file, WhatToDo);
                 break;
                 
             case 10:
-                interpolatedprint(file);
+                printop(file, WhatToDo);
                 break;
                 
             case 11:

@@ -1,2 +1,6 @@
 Name:          type                time                kallories           description                                                                                         
+abcde          |	второе        	|35                  |	423       |	ferfw sdf s                                                                                         
+abcdef         |	второе        	|45                  |	123       |	fds d fsa f                                                                                         
+brfd           |	десерт        	|43                  |	723       |	rw erwe rw rw                                                                                       
+fvs            |	десерт        	|25                  |	534       |	fs gsdfg                                                                                            
 hwet           |	напиток      	|34                  |	623       |	we re rwe r                                                                                         

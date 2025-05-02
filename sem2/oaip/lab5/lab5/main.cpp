@@ -252,6 +252,12 @@ public:
     
 };
 
+int isLetter(char s){
+    if((s>='a' && s<='z') || (s>='A' && s<='Z')){
+        return 1;
+    }
+    return 0;
+}
 
 int main() {
     char* infix = new char[100];
@@ -259,16 +265,26 @@ int main() {
     int check = 1;
     int flag = 0;
     int flag2 = 1;
+    int left = 0;
+    int right = 0;
     
     while(check){
+//        cin.ignore();
         cin.getline(infix, 100);
         long int size = strlen(infix);
         check = 0;
         for(int i = 0; i<size-1; i++){
-            if((!opz.isMath(infix[i]) && !opz.isMath(infix[i+1])) || (checkMath(infix[i]) && checkMath(infix[i+1])) || (checkMath(infix[size-1]))) {
+            if( (isLetter(infix[i]) && isLetter(infix[i+1])) || (checkMath(infix[i]) && checkMath(infix[i+1])) || (isLetter(infix[i]) && infix[i+1]=='(') || (infix[i]==')' && isLetter(infix[i+1])) || (infix[i]=='(' && infix[i+1]==')') || (infix[i]==')' && infix[i+1]=='(') ) {
                 flag = 1;
                 break;
             }
+            if(!isLetter(infix[i]) && !opz.isMath(infix[i])){
+                flag = 1;
+                break;
+            }
+                
+        }
+        for(int i = 0; i<size; i++){
             if(infix[i] == '('){
                 for(int j = i; j < size; j++){
                     if(infix[j]==')'){
@@ -276,13 +292,27 @@ int main() {
                         break;
                     }
                 }
+                left++;
+            }
+            if(infix[i]==')'){
+                right++;
             }
         }
-        if(flag || flag2){
+        if(((flag || !flag2) && right==0) || checkMath(infix[size-1])){
             check = 1;
             flag = 0;
             flag2 = 1;
-            cout << "retry";
+            right = 0;
+            left = 0;
+            cout << "retry\n";
+        }
+        if(((flag || flag2 || (right!=left)) && right!=0) || checkMath(infix[size-1])){
+            check = 1;
+            flag = 0;
+            flag2 = 1;
+            right = 0;
+            left = 0;
+            cout << "retry\n";
         }
     }
     

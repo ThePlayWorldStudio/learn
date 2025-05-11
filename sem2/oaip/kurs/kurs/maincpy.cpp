@@ -12,6 +12,14 @@ struct Recipe{
     char description[200];
 };
 
+void openFile(FILE *file, char fileName[100], char *mode){
+    file = fopen(fileName, mode);
+    if(!file){
+        cout << "Open file error!\n";
+        return;
+    }
+}
+
 int comp(char str1[100], char str2[100]){
     for(int i = 0; i<strlen(str2); i++){
         if(str1[i]!=str2[i]){
@@ -48,7 +56,7 @@ void printTitle(FILE *file){
     fprintf(file, "%-15s%-20s%-20s%-20s%-100s\n", "Name:", "type", "time", "kallories", "description");
 }
 
-int openFile(FILE* file, char fileName[100]){
+int IsExistsFile(FILE* file, char fileName[100]){
     file = fopen(fileName, "rb");
     return !file? 1: 0;
 }
@@ -65,7 +73,7 @@ void create(FILE *file, char fileName[100]){
 }
 
 void openNewFile(FILE *file, char *fileName){
-    if(openFile(file, fileName)){
+    if(IsExistsFile(file, fileName)){
         cout << "file " << fileName << " was created\n";
         create(file, fileName);
     }
@@ -263,11 +271,7 @@ void delEl(FILE *file, char fileName[100]){
 void edit(FILE *file, char fileName[100]){
     char name[100];
 
-    file = fopen(fileName, "rb");
-    if(!file){
-        cout << "Open file error!\n";
-        return;
-    }
+    openFile(file, fileName, "rb");
     
     int num = countStructs(file);
     
@@ -277,7 +281,7 @@ void edit(FILE *file, char fileName[100]){
     
     fclose(file);
 
-    file = fopen(fileName, "wb");
+    openFile(file, fileName, "wb");
     cout << "Введите название рецепта: ";
     cin.ignore(numeric_limits<streamsize>::max(),'\n');
     cin.getline(name, 100);
@@ -365,21 +369,19 @@ void interpolationSearch(Recipe *dishes, int n, int x, FILE *log) {
     }
 }
 
-void dietprint(FILE *file, char fileName[100]){
+void dietprint(FILE* log, FILE *file, char fileName[100]){
     int kal;
 
-    FILE* log = fopen("log.txt", "w");
-    file = fopen(fileName, "rb");
-    if(!file){
-        cout << "Open file error!\n";
-        return;
-    }
+    openFile(log, "log.txt", "w");
+    openFile(file, fileName, "rb");
     
     int num = countStructs(file);
     
     Recipe *dishes = new Recipe[num];
     
     structRead(file, dishes, num);
+
+    fclose(file);
 
     cout << "Введите калории: ";
     cin >> kal;
@@ -391,8 +393,7 @@ void dietprint(FILE *file, char fileName[100]){
             fprintf(log, "%-15s|\t%-20s\t|%-20d|\t%-10d|\t%-100s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall, dishes[i].description);
         }
     }
-
-    fclose(file);
+    
     delete [] dishes;
 }
 
@@ -431,21 +432,18 @@ void printMessage(){
             "9 - вывести меню\n";
 }
 
-void printop(FILE* file, char fileName[100], int WhatToDo){
+void printop(FILE* log, FILE* file, char fileName[100], int WhatToDo){
     bool isSort = false;
 
-    file = fopen(fileName, "rb");
-    FILE* log = fopen("log.txt", "w");
-    if(!file){
-        cout << "Open file error!\n";
-        return;
-    }
+    openFile(file, fileName, "rb");
+    openFile(log, "log.txt", "w");
 
     int num = countStructs(file);
     
     Recipe *dishes = new Recipe[num];
-    
     structRead(file, dishes, num);
+
+    fclose(file);
 
     switch (WhatToDo)
     {
@@ -486,8 +484,6 @@ void printop(FILE* file, char fileName[100], int WhatToDo){
             printTitle(log);
             printForSort(log, num, dishes); 
         }
-
-        fclose(file);
         fclose(log);
         delete [] dishes;
     
@@ -498,6 +494,7 @@ int main() {
     int WhatToDo;
     bool isWork = true;
     FILE* file = nullptr;
+    FILE* log = nullptr;
     char fileName[100];
 
     cout << "Enter filename: ";
@@ -526,22 +523,22 @@ int main() {
                 switch(WhatToDo){
                 case 1:
                 //sort for print
-                    printop(file, fileName, 4);
+                    printop(log, file, fileName, 4);
                     break;
 
                 case 2:
                 //bubble sort
-                    printop(file, fileName, 5);
+                    printop(log, file, fileName, 5);
                     break;
                     
                 case 3:
                 //quicksort
-                    printop(file, fileName, 6);
+                    printop(log, file, fileName, 6);
                     break;
 
                 case 4:
                 //selection sort
-                    printop(file, fileName, 7);
+                    printop(log, file, fileName, 7);
                     break;
             }
             break;
@@ -551,18 +548,18 @@ int main() {
                 switch (WhatToDo){
                     case 1:
                     //linear search
-                        printop(file, fileName, 8);
+                        printop(log, file, fileName, 8);
                         break;
                 
                     case 2:
                     //interpolated sort
-                        printop(file, fileName, 9);
+                        printop(log, file, fileName, 9);
                         break;
                 }
                 break;
 
             case 6:
-                dietprint(file, fileName);
+                dietprint(log, file, fileName);
                 break;
             
             case 7:

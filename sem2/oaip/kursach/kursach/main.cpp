@@ -15,23 +15,6 @@ struct Recipe{
     char description[200];
 };
 
-void openFile(FILE *file, char fileName[100], char *mode){
-    file = fopen(fileName, mode);
-    if(!file){
-        cout << "Open file error!\n";
-        return;
-    }
-}
-
-int comp(char str1[100], char str2[100]){
-    for(int i = 0; i<strlen(str2); i++){
-        if(str1[i]!=str2[i]){
-            return 0;
-        }
-    }
-    return 1;
-}
-
 int countStructs(FILE *file){
     fseek(file, 0, SEEK_END);
     int num = (int)(ftell(file)/sizeof(Recipe));
@@ -40,10 +23,9 @@ int countStructs(FILE *file){
 }
 
 void structRead(FILE *file, Recipe *dishes, int num){
-    for(int i = 0; i<num; i++){
+    for(int i = 0; i<num; i++)
         fread(&dishes[i], sizeof(Recipe), 1, file);
-    }
-
+    
     fseek(file, 0, SEEK_SET);
 }
 
@@ -55,13 +37,15 @@ void structWrite(FILE *file, Recipe *dishes, int num){
 }
 
 void printTitle(FILE *file){
-    fprintf(stdout, "%-15s%-20s%-20s%-20s%-100s\n", "Name:", "type", "time", "kallories", "description");
-    fprintf(file, "%-15s%-20s%-20s%-20s%-100s\n", "Name:", "type", "time", "kallories", "description");
+    fprintf(stdout, "%-15s%-20s%-20s%-20s%-100s\n", "Name:", "type", "time", "calories", "description");
+    fprintf(file, "%-15s%-20s%-20s%-20s%-100s\n", "Name:", "type", "time", "calories", "description");
 }
 
 int IsExistsFile(FILE* file, char fileName[100]){
     file = fopen(fileName, "rb");
-    return !file? 1: 0;
+    int check = !file? 1: 0;
+    fclose(file);
+    return check;
 }
 
 void create(FILE *file, char fileName[100]){
@@ -82,45 +66,46 @@ void openNewFile(FILE *file, char *fileName){
     }
 }
 
-void add(FILE *file, char fileName[100]){
+void add(FILE* log, FILE *file, char fileName[100]){
     Recipe dish;
     int n;
     int iche;
     bool problem = true;
     file = fopen(fileName, "ab");
-    if(!file){
+    log = fopen("log.txt", "a");
+    if(!file || !log){
         cout << "Open file error!\n";
         return;
     }
-    cout << "Введите количество рецептов: ";
+    cout << "Enter number of recipes: ";
     cin >> n;
     cin.ignore(numeric_limits<streamsize>::max(),'\n');
 
     for(int i = 0; i < n; i++){
-        cout << "Введите название рецепта: ";
+        cout << "Enter name of recipe: ";
         cin.getline(dish.name, 90);
-        cout << "Введите тип рецепта (1 - первое, 2 - второе, 3 - десерт, 4 - напиток): ";
+        cout << "Enter type of recipe (1 - first, 2 - second, 3 - dessert, 4 - drink): ";
         problem = true;
         cin >> iche;
         while(problem){
             switch (iche) {
                 case 1:
-                    strcpy(dish.type, "первое");
+                    strcpy(dish.type, "first");
                     dish.typenum = 1;
                     problem = false;
                     break;
                 case 2:
-                    strcpy(dish.type, "второе");
+                    strcpy(dish.type, "second");
                     dish.typenum = 2;
                     problem = false;
                     break;
                 case 3:
-                    strcpy(dish.type, "десерт");
+                    strcpy(dish.type, "dessert");
                     dish.typenum = 3;
                     problem = false;
                     break;
                 case 4:
-                    strcpy(dish.type, "напиток");
+                    strcpy(dish.type, "drink");
                     problem = false;
                     dish.typenum = 4;
                     break;
@@ -131,17 +116,29 @@ void add(FILE *file, char fileName[100]){
             }
             
         }
-        cout << "Введите калории рецепта: ";
-        cin >> dish.kall;
-        cout << "Введите время приготовления рецепта: ";
-        cin >> dish.time;
-        cout << "Введите описание рецепта: ";
+        cout << "Enter calories: ";
+        while(true){
+            cin >> dish.kall;
+            if(dish.kall>=0){
+                break;
+            }
+        }
+        cout << "Enter time: ";
+        while(true){
+            cin >> dish.time;
+            if(dish.time>=0){
+                break;
+            }
+        }
+        cout << "Enter description: ";
         cin.ignore(numeric_limits<streamsize>::max(),'\n');
         cin.getline(dish.description, 190);
         
         fwrite(&dish, sizeof(Recipe), 1, file);
     }
     
+    cout << "element was eaaded\n";
+    fprintf(log, "element was eaaded\n");
     fclose(file);
 }
 
@@ -232,11 +229,12 @@ void selectionSort(Recipe *dishes, int n) {
     }
 }
 
-void delEl(FILE *file, char fileName[100]){
+void delEl(FILE* log, FILE *file, char fileName[100]){
     char name[100];
 
     file = fopen(fileName, "rb");
-    if(!file){
+    log = fopen("log.txt", "w");
+    if(!file || !log){
         cout << "Open file error!\n";
         return;
     }
@@ -250,7 +248,7 @@ void delEl(FILE *file, char fileName[100]){
 
 
     file = fopen(fileName, "wb");
-    cout << "Введите название рецепта: ";
+    cout << "Enter recipe name: ";
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
     cin.getline(name, 100);
     
@@ -264,17 +262,30 @@ void delEl(FILE *file, char fileName[100]){
         if(delele)
             dishes[i]=dishes[i+1];
     }
-        
+    
+    if(delele){
+        cout << "element is deleted\n";
+        fprintf(log, "element is deleted\n");
+    } else {
+        cout << "something went wrong...\n";
+        fprintf(log, "something went wrong...\n");
+    }
     structWrite(file, dishes, num);
     
     fclose(file);
+    fclose(log);
     delete [] dishes;
 }
 
-void edit(FILE *file, char fileName[100]){
+void edit(FILE* log, FILE *file, char fileName[100]){
     char name[100];
 
-    openFile(file, fileName, "rb");
+    file = fopen(fileName, "rb");
+    log = fopen("log.txt", "a");
+    if(!file || !log){
+        cout << "Open file error!\n";
+        return;
+    }
     
     int num = countStructs(file);
     
@@ -284,8 +295,9 @@ void edit(FILE *file, char fileName[100]){
     
     fclose(file);
 
-    openFile(file, fileName, "wb");
-    cout << "Введите название рецепта: ";
+//    openFile(file, fileName, "wb");
+    file = fopen(fileName, "wb");
+    cout << "Enter recipe name: ";
     cin.ignore(numeric_limits<streamsize>::max(),'\n');
     cin.getline(name, 100);
     
@@ -293,30 +305,30 @@ void edit(FILE *file, char fileName[100]){
     
     for(int i = 0; i<num; i++){
         if(strcmp(dishes[i].name, name)==0){
-            cout << "Введите название рецепта: ";
+            cout << "Enter name: ";
             cin.getline(dishes[i].name, 100);
-            cout << "Введите тип рецепта (1 - первое, 2 - второе, 3 - десерт, 4 - напиток): ";
+            cout << "Enter type of recipe (1 - first, 2 - second, 3 - dessert, 4 - drink): ";
             cin >> iche;
             bool problem = true;
             while(problem){
                 switch (iche) {
                     case 1:
-                        strcpy(dishes[i].type, "первое");
+                        strcpy(dishes[i].type, "first");
                         dishes[i].typenum = 1;
                         problem = false;
                         break;
                     case 2:
-                        strcpy(dishes[i].type, "второе");
+                        strcpy(dishes[i].type, "second");
                         dishes[i].typenum = 2;
                         problem = false;
                         break;
                     case 3:
-                        strcpy(dishes[i].type, "десерт");
+                        strcpy(dishes[i].type, "dessert");
                         dishes[i].typenum = 3;
                         problem = false;
                         break;
                     case 4:
-                        strcpy(dishes[i].type, "напиток");
+                        strcpy(dishes[i].type, "drink");
                         problem = false;
                         dishes[i].typenum = 4;
                         break;
@@ -326,11 +338,21 @@ void edit(FILE *file, char fileName[100]){
                         break;
                 }
             }
-            cout << "Введите калории рецепта: ";
-            cin >> dishes[i].kall;
-            cout << "Введите время приготовления рецепта: ";
-            cin >> dishes[i].time;
-            cout << "Введите описание рецепта: ";
+            cout << "Enter calories: ";
+            while(true){
+                cin >> dishes[i].kall;
+                if(dishes[i].kall>=0){
+                    break;
+                }
+            }
+            cout << "Enter time: ";
+            while(true){
+                cin >> dishes[i].time;
+                if(dishes[i].time>=0){
+                    break;
+                }
+            }
+            cout << "Enter description: ";
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cin.getline(dishes[i].description, 190);
             
@@ -338,7 +360,8 @@ void edit(FILE *file, char fileName[100]){
     }
         
     structWrite(file, dishes, num);
-    
+    cout << "element was edited\n";
+    fprintf(log, "element was edited\n");
     fclose(file);
     delete [] dishes;
 }
@@ -368,15 +391,17 @@ void interpolationSearch(Recipe *dishes, int n, int x, FILE *log) {
     }
     if(problem){
         printTitle(log);
-        cout << "not found";
+        cout << "not found\n";
     }
 }
 
 void dietprint(FILE* log, FILE *file, char fileName[100]){
     int kal;
 
-    openFile(log, "log.txt", "w");
-    openFile(file, fileName, "rb");
+//    openFile(log, "log.txt", "w");
+    log = fopen("log.txt", "a");
+    file = fopen(fileName, "rb");
+//    openFile(file, fileName, "rb");
     
     int num = countStructs(file);
     
@@ -386,9 +411,9 @@ void dietprint(FILE* log, FILE *file, char fileName[100]){
 
     fclose(file);
 
-    cout << "Введите калории: ";
+    cout << "Enter calories: ";
     cin >> kal;
-    quicksort(dishes, 0, num-1);
+    selectionSort(dishes, num);
     
     for(int i = 0; i < num; i++) {
         if(dishes[i].kall < kal){
@@ -397,6 +422,7 @@ void dietprint(FILE* log, FILE *file, char fileName[100]){
         }
     }
     
+    fclose(log);
     delete [] dishes;
 }
 
@@ -427,8 +453,8 @@ void printForSort(FILE *file, int num, Recipe *dishes){
 
 void printMessage(){
     cout << "\n 1 - добавить рецепт(ы).\n 2 - редактирование записей в файле.\n 3 - Удаление записей из файла.\n\n "
-            "4 - сортировки: \n\t4.1 - сортировка и категоризация \n\t4.2 - сортировка пузырьком \n\t4.3 - быстрая сортировка \n\t4.4 - сортировка выбором\n\n"
-            "5 - поиски: \n\t5.1 - линейный \n\t5.2 - интерполяционный\n\n"
+            "4 - сортировки: \n\t4.1 - сортировка и категоризация \n\t4.2 - сортировка пузырьком \n\t4.3 - быстрая сортировка \n\t4.4 - сортировка выбором\n\t4.5 - выход\n\n"
+            "5 - поиски: \n\t5.1 - линейный \n\t5.2 - интерполяционный\n\t5.3 - выход\n\n"
             "6 - поиск диетического рецепта.\n"
             "7 - вывод меню\n"
             "8 - выйти из программы\n"
@@ -438,8 +464,10 @@ void printMessage(){
 void printop(FILE* log, FILE* file, char fileName[100], int WhatToDo){
     bool isSort = false;
 
-    openFile(file, fileName, "rb");
-    openFile(log, "log.txt", "w");
+//    openFile(file, fileName, "rb");
+    file = fopen(fileName, "rb");
+//    openFile(log, "log.txt", "w");
+    log = fopen("log.txt", "a");
 
     int num = countStructs(file);
     
@@ -478,7 +506,14 @@ void printop(FILE* log, FILE* file, char fileName[100], int WhatToDo){
             int kal;
 
             cout << "Введите калории рецепта: ";
-            cin >> kal;
+            while (true){
+                cin >> kal;
+                if(kal>=0){
+                    break;
+                }
+                cout << "calories can't be less than 0!\n";
+            }
+            
             quicksort(dishes, 0, num-1);
             interpolationSearch(dishes, num, kal, log);
         }
@@ -507,21 +542,23 @@ int main() {
     printMessage();
 
     while(isWork){
+        cout << "enter number of item: ";
         cin >> operation;
         switch (operation) {
             case 1:
-                add(file, fileName);
+                add(log, file, fileName);
                 break;
 
             case 2:
-                edit(file, fileName);
+                edit(log, file, fileName);
                 break;
 
             case 3:
-                delEl(file, fileName);
+                delEl(log, file, fileName);
                 break;
 
             case 4:
+                cout << "enter number of sub-item: ";
                 cin >> WhatToDo;
                 switch(WhatToDo){
                 case 1:
@@ -543,10 +580,19 @@ int main() {
                 //selection sort
                     printop(log, file, fileName, 7);
                     break;
+
+                case 5:
+                // выход
+                    break;
+                    
+                default:
+                    printMessage();
+                    break;
             }
             break;
                 
             case 5:
+                cout << "enter number of sub-item: ";
                 cin >> WhatToDo;
                 switch (WhatToDo){
                     case 1:
@@ -557,6 +603,14 @@ int main() {
                     case 2:
                     //interpolated sort
                         printop(log, file, fileName, 9);
+                        break;
+
+                    case 3:
+                        // выход
+                        break;
+                    
+                    default:
+                        printMessage();
                         break;
                 }
                 break;

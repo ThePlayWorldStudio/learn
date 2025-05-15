@@ -1,0 +1,7 @@
+Name:          type                time                kallories           description                                                                                         
+hteedbt        |	первое        	|74                  |	754       |	t hfghdf hgd                                                                                        
+mtef           |	второе        	|12                  |	509       |	rgs dg sd                                                                                           
+ydfb           |	второе        	|63                  |	634       |	wrt wer sdfg sd                                                                                     
+bruh           |	десерт        	|64                  |	757       |	yf gukjgjk                                                                                          
+vij            |	десерт        	|35                  |	857       |	fhjgfuhg kjh jk                                                                                     
+angd           |	напиток      	|24                  |	534       |	fdgsd fgsdg                                                                                         

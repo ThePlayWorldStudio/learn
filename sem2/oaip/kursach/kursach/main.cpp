@@ -505,7 +505,7 @@ void printop(FILE* log, FILE* file, char fileName[100], int WhatToDo){
         case 9:
             int kal;
 
-            cout << "Введите калории рецепта: ";
+            cout << "Enter calories of recept: ";
             while (true){
                 cin >> kal;
                 if(kal>=0){

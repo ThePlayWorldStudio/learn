@@ -5,3 +5,19 @@ ydfb           |	второе        	|63                  |	634       |	wrt wer
 bruh           |	десерт        	|64                  |	757       |	yf gukjgjk                                                                                          
 vij            |	десерт        	|35                  |	857       |	fhjgfuhg kjh jk                                                                                     
 angd           |	напиток      	|24                  |	534       |	fdgsd fgsdg                                                                                         
+### Sort by category ###
+Name:          type                time                calories            description                                                                                         
+hteedbt        |	первое        	|74                  |	754       |	t hfghdf hgd                                                                                        
+mtef           |	второе        	|12                  |	509       |	rgs dg sd                                                                                           
+ydfb           |	второе        	|63                  |	634       |	wrt wer sdfg sd                                                                                     
+bruh           |	десерт        	|64                  |	757       |	yf gukjgjk                                                                                          
+vij            |	десерт        	|35                  |	857       |	fhjgfuhg kjh jk                                                                                     
+angd           |	напиток      	|24                  |	534       |	fdgsd fgsdg                                                                                         
+### Bubble sort by name ###
+Name:          type                time                calories            description                                                                                         
+angd           |	напиток      	|24                  |	534       |	fdgsd fgsdg                                                                                         
+bruh           |	десерт        	|64                  |	757       |	yf gukjgjk                                                                                          
+hteedbt        |	первое        	|74                  |	754       |	t hfghdf hgd                                                                                        
+mtef           |	второе        	|12                  |	509       |	rgs dg sd                                                                                           
+vij            |	десерт        	|35                  |	857       |	fhjgfuhg kjh jk                                                                                     
+ydfb           |	второе        	|63                  |	634       |	wrt wer sdfg sd                                                                                     

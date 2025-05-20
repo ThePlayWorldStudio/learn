@@ -25,8 +25,8 @@ int countStructs(FILE *file){
 void structRead(FILE *file, Recipe *dishes, int num){
     for(int i = 0; i<num; i++)
         fread(&dishes[i], sizeof(Recipe), 1, file);
-    
-    fseek(file, 0, SEEK_SET);
+        
+        fseek(file, 0, SEEK_SET);
 }
 
 void structWrite(FILE *file, Recipe *dishes, int num){
@@ -137,8 +137,8 @@ void add(FILE* log, FILE *file, char fileName[100]){
         fwrite(&dish, sizeof(Recipe), 1, file);
     }
     
-    cout << "element was eaaded\n";
-    fprintf(log, "element was eaaded\n");
+    cout << "element was added\n";
+    fprintf(log, "\n### Element %20s was added ###\n", dish.name);
     fclose(file);
 }
 
@@ -273,6 +273,7 @@ void delEl(FILE* log, FILE *file, char fileName[100]){
     structWrite(file, dishes, num);
     
     fclose(file);
+    fprintf(log, "\n### Element %20s was deleted ###\n", name);
     fclose(log);
     delete [] dishes;
 }
@@ -361,7 +362,7 @@ void edit(FILE* log, FILE *file, char fileName[100]){
         
     structWrite(file, dishes, num);
     cout << "element was edited\n";
-    fprintf(log, "element was edited\n");
+    fprintf(log, "\n### Element %20s was edited ###\n", name);
     fclose(file);
     delete [] dishes;
 }
@@ -479,26 +480,31 @@ void printop(FILE* log, FILE* file, char fileName[100], int WhatToDo){
     switch (WhatToDo)
     {
         case 4:
+            fprintf(log, "\n### Sort by category ###\n");
             sort_for_print(dishes, num);
             isSort = true;
             break;
 
         case 5:
+            fprintf(log, "\n### Bubble sort by name ###\n");
             bubblesort(dishes, num);
             isSort = true;
             break;
 
         case 6:
+            fprintf(log, "\n### quick sort by calories ###\n");
             quicksort(dishes, 0, num-1);
             isSort = true;
             break;
 
         case 7:
+            fprintf(log, "\n### Selection sort by time ###\n");
             selectionSort(dishes, num);
             isSort = true;
             break;
 
         case 8:
+            fprintf(log, "\n### linear search by name ###\n");
             linearSearch(file, log,  dishes, num);
             break;
 
@@ -514,6 +520,7 @@ void printop(FILE* log, FILE* file, char fileName[100], int WhatToDo){
                 cout << "calories can't be less than 0!\n";
             }
             
+            fprintf(log, "\n### Interpolated search by calories ###\n");
             quicksort(dishes, 0, num-1);
             interpolationSearch(dishes, num, kal, log);
         }

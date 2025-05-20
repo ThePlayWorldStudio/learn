@@ -11,16 +11,10 @@ struct Node{
     char string[100];
     Node* left = NULL;
     Node* right = NULL;
-    int height = 0;
     
     Node(int k, char s[100]){
         key = k;
         strcpy(string, s);
-    }
-
-    ~Node(){
-        delete left;
-        delete right;
     }
 
 };
@@ -63,13 +57,12 @@ public:
         std::cout << "Element was added\n";
     }
     
-    void updateHeight(Node* node){
-        node->height = maxim(getHeight(node->left), getHeight(node->right)) + 1;
+    int getHeight(Node* node){
+        return node ? maxim(getHeight(node->left), getHeight(node->right)) + 1 : 0;
     }
 
     Node* balance(Node* p) // балансировка узла p
     {
-        updateHeight(p);
         if( bfactor(p)==2 )
         {
             if( bfactor(p->right) < 0 )
@@ -85,26 +78,119 @@ public:
         return p; // балансировка не нужна
     }
     
+    void del(int key) {
+        Node *curr = root;
+        Node *parent = nullptr;
+        bool isLeft = false;
+
+        while(curr && curr->key != key) {
+            parent = curr;
+            if(key < curr->key) {
+                curr = curr->left;
+                isLeft = true;
+            }
+            else {
+                curr = curr->right;
+                isLeft = false;
+            }
+        }
+
+        if(!curr) {
+            std::cout << "Key " << key << " not found\n";
+            return;
+        }
+        
+        if(!curr->left && !curr->right) {       // нет детей
+            if(!parent) {
+                root = nullptr;
+            }
+            else if(isLeft) {
+                parent->left = nullptr;
+            }
+            else {
+                parent->right = nullptr;
+            }
+            delete curr;
+        }
+        else if(!curr->left || !curr->right) {  // один ребенок
+            Node *child = curr->left ? curr->left : curr->right;
+            if(!parent) {
+                root = child;
+            }
+            else if(isLeft) {
+                parent->left = child;
+            }
+            else {
+                parent->right = child;
+            }
+            delete curr;
+        }
+        else {          // два ребенка
+            Node *succ = curr->right;
+            Node *succParent = curr;
+            while(succ->left) {
+                succParent = succ;
+                succ = succ->left;
+            }
+
+            curr->key = succ->key;
+            strncpy(curr->string, succ->string, 99);
+            curr->string[99] = '\0';
+
+            if(succParent == curr) {
+                succParent->right = succ->right;
+            }
+            else {
+                succParent->left = succ->right;
+            }
+            delete succ;
+        }
+        root = balance(root);
+        std::cout << "Element was deleted\n";
+    }
+    
+    void getMid(){
+        int mid = (getMax(root)->key - getMin(root)->key)/2;
+        int bef, next;
+        
+        Node* curr = root;
+        while(curr){
+            if(curr->left->key<mid && curr->right->key>mid){
+                cout << curr->key << ": " << curr->string << endl;
+                return;
+            }
+            if(curr->key > mid){
+                curr = curr->left;
+            } else if(curr->key < mid){
+                curr = curr->right;
+            }
+        }
+    }
+    
+    void Print(int k){
+        cout << search(k, root)->string;
+    }
+    
+    ~Tree(){
+        clearTree();
+        root = nullptr;
+    }
     
 private:
-    int getMax(Node* node){
+    Node* getMax(Node* node){
         if(node->right == NULL){
-            return node->key;
+            return node;
         } else {
             return getMax(node->right);
         }
     }
     
-    int getMin(Node* node){
+    Node* getMin(Node* node){
         if(node->left == NULL){
-            return node->key;
+            return node;
         } else {
             return getMin(node->left);
         }
-    }
-    
-    int getHeight(Node* node){
-        return node? node->height: 0;
     }
 
     int bfactor(Node* p)
@@ -117,8 +203,6 @@ private:
         Node* q = p->left;
         p->left = q->right;
         q->right = p;
-        updateHeight(p);
-        updateHeight(q);
         return q;
     }
     
@@ -127,9 +211,31 @@ private:
         Node* q = p->right;
         p->right = q->left;
         q->left = p;
-        updateHeight(p);
-        updateHeight(q);
         return q;
+    }
+    
+    Node* search(int k, Node* node){
+        if(!node){
+            cout << "element not found!\n";
+            return nullptr;
+        }
+        if(node->key == k)  return node;
+        if(k < node->key)   return search(k, node->left);
+        if(k > node->key)   return search(k, node->right);
+        
+        return nullptr;
+    }
+    
+    void clearTree() {
+        clearRecursive(root);
+        root = nullptr;
+    }
+    
+    void clearRecursive(Node *node) {
+        if(!node)   return;
+        clearRecursive(node->left);
+        clearRecursive(node->right);
+        delete node;
     }
 };
 
@@ -138,8 +244,15 @@ int main() {
     myTree.add(4, "SUS");
     myTree.add(3, "fes");
     myTree.add(2, "baka");
-    
-    
+    myTree.add(10, "nan");
+    myTree.add(7, "bs");
+    myTree.add(1, "da");
+    myTree.del(2);
+    myTree.del(7);
+    myTree.del(10);
+    myTree.del(4);
+    myTree.getMid();
+    myTree.Print(2);
     
     return 0;
 }

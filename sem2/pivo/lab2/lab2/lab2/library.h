@@ -10,6 +10,9 @@
 using namespace std;
 
 string readSets(const char* filename);
-int checkSets(string sets);
+int checkString(string sets);
+vector<string> parseString(int num, string str);
+vector<string> addSets(string str);
+vector<string> cross(vector<string> set1, vector<string> set2);
 
 #endif

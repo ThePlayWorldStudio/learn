@@ -3,9 +3,30 @@
 int main(){
     const char* filename = "input.txt"; 
     
-    string sets = readSets(filename);
+    string str = readSets(filename);
+    int numSets = checkString(str);
 
-    checkSets(sets);
+    if(numSets==-1){
+	    cout << "Incorrect input!\n";
+	    return 0;
+    }
 
+    vector<string> rawSets = parseString(numSets, str);
+
+    vector<string>* sets = new vector<string>[numSets];
+
+    for(int i = 0; i<numSets; i++){
+	    sets[i]= addSets(rawSets[i]);
+    }
+
+    vector<string> Cross = cross(sets[0], sets[1]);
+    for(int i = 2; i<numSets; i++)
+	Cross = cross(Cross, sets[i]);
+
+    cout << "{";
+    for(int i = 0; i<Cross.size(); i++)
+	    cout << Cross[i] << ", ";
+    cout << "}\n";
+    delete [] sets;
     return 0;
 }

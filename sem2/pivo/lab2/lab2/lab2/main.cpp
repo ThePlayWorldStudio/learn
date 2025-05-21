@@ -11,13 +11,14 @@ int main(){
 	    return 0;
     }
 
-    vector<string> rawSets = parseString(numSets, str);
-
     vector<string>* sets = new vector<string>[numSets];
 
-    for(int i = 0; i<numSets; i++){
-	    sets[i]= addSets(rawSets[i]);
-    }
+    char* temp = strtok(str.data(), ",");
+
+    for(int i = 0; temp; i++){
+	   sets[i].push_back(temp);
+	   temp =strtok(NULL, ",");
+    } 
 
     vector<string> Cross = cross(sets[0], sets[1]);
     for(int i = 2; i<numSets; i++)

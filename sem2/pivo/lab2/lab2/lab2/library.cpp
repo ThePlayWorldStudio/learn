@@ -69,10 +69,11 @@ vector<string> addSets(string str){
 
 	char* temp = strtok(str.data(), ",");
 	while(temp){
+		cout << temp;
 		set.push_back(temp);
 		temp=strtok(NULL, ",");
 	}
-
+	cout << endl;
 	return set;
 }
 

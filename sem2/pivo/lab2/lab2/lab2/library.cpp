@@ -108,13 +108,13 @@ vector<string> addSets(string str){
 	return set;
 }
 
-string normalizeElement(string& elem) {       // приводит строку в приличный вид
+string normalize(string& elem) {       // приводит строку в приличный вид
     if (elem.empty()) return "";
 
     if (elem.front() == '<' && elem.back() == '>') {
         vector<string> inner = addSets(elem);
         for (auto& it : inner) {
-            it = normalizeElement(it);
+            it = normalize(it);
         }
 
         string res = "<";
@@ -130,7 +130,7 @@ string normalizeElement(string& elem) {       // приводит строку �
         vector<string> normalized; 
 
         for (auto& it : inner)
-            normalized.push_back(normalizeElement(it));
+            normalized.push_back(normalize(it));
 
         sort(normalized.begin(), normalized.end(), [](const string& a, const string& b) {
             char first_a = a.front();
@@ -145,6 +145,7 @@ string normalizeElement(string& elem) {       // приводит строку �
         });
 
         if (normalized.size() == 1) {
+	    cout << normalized[0] << endl;
             return normalized[0];
         }
 
@@ -154,11 +155,13 @@ string normalizeElement(string& elem) {       // приводит строку �
             result += normalized[i];
         }
         result += "}";
+	cout << result << endl;
         return result;
     }
     else {
         string simple = elem;
         simple.erase(remove_if(simple.begin(), simple.end(), ::isspace), simple.end());
+	cout << simple << endl;
         return simple;
     }
 }
@@ -170,8 +173,19 @@ vector<string> cross(vector<string> set1, vector<string> set2){
 	int num1 = set1.size();
 	int num2 = set2.size();
 
-	int eq = 0;
+	for(int i = 0; i<num1; i++){
+		for(int j =  0; j<num2; j++){
+			if(set1[i].front() == '{' || set1[i].front()=='<'){
+				normalize(set1[i]);
+			}
 
+			if(set2[j].front() == '{' || set2[j].front()=='<'){
+				normalize(set1[i]);
+			}
+
+			if(!strcmp(set1[i].data(), set2[j].data()))
+				cross.push_back(set1[i]);
+		}
+	}
 	return cross;
-
 }

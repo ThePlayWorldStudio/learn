@@ -12,7 +12,7 @@ string readSets(const char* filename);
 int checkString(string sets);
 vector<string> parseString(int num, string str);
 vector<string> addSets(string str);
-string normalizeElement(string& elem);
+string normalize(string& elem);
 vector<string> cross(vector<string> set1, vector<string> set2);
 
 #endif

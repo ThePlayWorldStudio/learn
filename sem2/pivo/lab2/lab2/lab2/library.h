@@ -1,7 +1,6 @@
 #ifndef HEADER_H
 #define HEADER_H
 #include <iostream>
-#include <fstream>
 #include <vector>
 #include <algorithm>
 #include <string>
@@ -13,6 +12,7 @@ string readSets(const char* filename);
 int checkString(string sets);
 vector<string> parseString(int num, string str);
 vector<string> addSets(string str);
+string normalizeElement(string& elem);
 vector<string> cross(vector<string> set1, vector<string> set2);
 
 #endif

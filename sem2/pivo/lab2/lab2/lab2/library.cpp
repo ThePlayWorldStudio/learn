@@ -108,6 +108,61 @@ vector<string> addSets(string str){
 	return set;
 }
 
+string normalizeElement(string& elem) {       // приводит строку в приличный вид
+    if (elem.empty()) return "";
+
+    if (elem.front() == '<' && elem.back() == '>') {
+        vector<string> inner = addSets(elem);
+        for (auto& it : inner) {
+            it = normalizeElement(it);
+        }
+
+        string res = "<";
+        for (int i = 0; i < inner.size(); ++i) {
+            if (i > 0) res += ",";
+            res += inner[i];
+        }
+        res += ">";
+        return res;
+    }
+    else if (elem.front() == '{' && elem.back() == '}') {
+        vector<string> inner = addSets(elem);
+        vector<string> normalized; 
+
+        for (auto& it : inner)
+            normalized.push_back(normalizeElement(it));
+
+        sort(normalized.begin(), normalized.end(), [](const string& a, const string& b) {
+            char first_a = a.front();
+            char first_b = b.front();
+
+            if (first_a == first_b) return a < b;
+            if (first_a == '{') return false;
+            if (first_b == '{') return true;
+            if (first_a == '<') return false;
+            if (first_b == '<') return true;
+            return a < b; 
+        });
+
+        if (normalized.size() == 1) {
+            return normalized[0];
+        }
+
+        string result = "{";
+        for (int i = 0; i < normalized.size(); i++) {
+            if (i > 0) result += ",";
+            result += normalized[i];
+        }
+        result += "}";
+        return result;
+    }
+    else {
+        string simple = elem;
+        simple.erase(remove_if(simple.begin(), simple.end(), ::isspace), simple.end());
+        return simple;
+    }
+}
+
 
 
 vector<string> cross(vector<string> set1, vector<string> set2){

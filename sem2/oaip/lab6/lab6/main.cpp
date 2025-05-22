@@ -149,24 +149,6 @@ public:
         std::cout << "Element was deleted\n";
     }
     
-    void getMid(){
-        int mid = (getMax(root)->key - getMin(root)->key)/2;
-        int bef, next;
-        
-        Node* curr = root;
-        while(curr){
-            if(curr->left->key<mid && curr->right->key>mid){
-                cout << curr->key << ": " << curr->string << endl;
-                return;
-            }
-            if(curr->key > mid){
-                curr = curr->left;
-            } else if(curr->key < mid){
-                curr = curr->right;
-            }
-        }
-    }
-    
     void Print(int k){
         cout << search(k, root)->string;
     }
@@ -174,6 +156,62 @@ public:
     ~Tree(){
         clearTree();
         root = nullptr;
+    }
+    
+    void printPreOrder() const {
+        if(!root) {
+            std::cout << "Tree is empty\n";
+            return;
+        }
+        std::cout << " key       data\n";
+        printPreOrderRecursive(root);
+    }
+
+    void printPreOrderRecursive(Node *node) const {
+        if(!node)   return;
+        printNode(node);
+        printPreOrderRecursive(node->left);
+        printPreOrderRecursive(node->right);
+    }
+
+    void printPostOrder() const {
+        if(!root) {
+            std::cout << "Tree is empty\n";
+            return;
+        }
+        std::cout << " key       data\n";
+        printPostOrderRecursive(root);
+    }
+
+    void printPostOrderRecursive(Node *node) const {
+        if(!node)   return;
+        printPostOrderRecursive(node->left);
+        printPostOrderRecursive(node->right);
+        printNode(node);
+    }
+
+    void printInOrder() const {
+        if(!root) {
+            std::cout << "Tree is empty\n";
+            return;
+        }
+        std::cout << " key       data\n";
+        printInOrderRecursive(root);
+    }
+
+    void printInOrderRecursive(Node *node) const {
+        if(!node)   return;
+        printInOrderRecursive(node->left);
+        printNode(node);
+        printInOrderRecursive(node->right);
+    }
+    
+    void printNode(Node *node) const {
+        cout << node->key << node->string << '\n';
+    }
+    
+    void MinMax(){
+        swap(getMin(root)->string, getMax(root)->string);
     }
     
 private:
@@ -241,18 +279,61 @@ private:
 
 int main() {
     Tree myTree;
-    myTree.add(4, "SUS");
-    myTree.add(3, "fes");
-    myTree.add(2, "baka");
-    myTree.add(10, "nan");
-    myTree.add(7, "bs");
-    myTree.add(1, "da");
-    myTree.del(2);
-    myTree.del(7);
-    myTree.del(10);
-    myTree.del(4);
-    myTree.getMid();
-    myTree.Print(2);
+    cout << "1. add;\n2. delete;\n3. print string\n4. preorder\n5. in order\n6. postorder\n7. \n8. exit\n";
+    
+    int iche;
+    int isWork = 1;
+    int key;
+    char str[99];
+    
+    while(isWork){
+        cin >> iche;
+        switch (iche) {
+            case 1:
+                cout << "string: ";
+                cin.ignore();
+                cin.getline(str, 99);
+                cout << "key: ";
+                cin >> key;
+                myTree.add(key, str);
+                break;
+            
+            case 2:
+                cout << "key: ";
+                cin >> key;
+                myTree.del(key);
+                break;
+            
+            case 3:
+                cout << "key: ";
+                cin >> key;
+                myTree.Print(key);
+                break;
+                
+            case 4:
+                myTree.printPreOrder();
+                break;
+                
+            case 5:
+                myTree.printPostOrder();
+                break;
+                
+            case 6:
+                myTree.printPostOrder();
+                break;
+                
+            case 7:
+                myTree.MinMax();
+                break;
+                
+            case 8:
+                isWork = 0;
+                break;
+                
+            default:
+                break;
+        }
+    }
     
     return 0;
 }

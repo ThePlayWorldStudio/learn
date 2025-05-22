@@ -108,6 +108,8 @@ vector<string> addSets(string str){
 	return set;
 }
 
+
+
 vector<string> cross(vector<string> set1, vector<string> set2){
 	vector<string> cross;
 	int num1 = set1.size();
@@ -115,34 +117,6 @@ vector<string> cross(vector<string> set1, vector<string> set2){
 
 	int eq = 0;
 
-	for(int i = 0; i<num1; i++){
-		for(int j = 0; j<num2; j++){
-			if(set1[i][0]=='{' && set2[j][0]=='{'){
-				if(set1[i].length()!=set2[j].length())
-					continue;
-				else{
-					for(int k = 0; k<set1[i].length(); k++){
-						for(int l = 0; l<set2[j].length(); l++){
-							if(set1[i][k]=='{' || set1[i][k]==',' || set1[i][l]=='}')
-								break;
-							if(set1[i][k]==set2[j][l])
-								eq = 1;
-						}
-						if(eq){
-							cross.push_back(set1[i]);
-							eq = 0;
-						}
-					}
-				}
-			}
-		else if(!strcmp(set1[i].data(), set2[j].data()))
-				eq = 1;
-		}
-		if(eq){
-			cross.push_back(set1[i]);
-			eq = 0;
-		}
-	}
 	return cross;
 
 }

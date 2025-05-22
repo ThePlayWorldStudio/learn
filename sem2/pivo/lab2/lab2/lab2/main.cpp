@@ -10,15 +10,13 @@ int main(){
 	    cout << "Incorrect input!\n";
 	    return 0;
     }
-
+	
+    vector<string> rawSets = parseString(numSets, str);
     vector<string>* sets = new vector<string>[numSets];
 
-    char* temp = strtok(str.data(), ",");
-
-    for(int i = 0; temp; i++){
-	   sets[i].push_back(temp);
-	   temp =strtok(NULL, ",");
-    } 
+    for(int j = 0; j<numSets; j++){
+	    sets[j] = addSets(rawSets[j]);
+    }
 
     vector<string> Cross = cross(sets[0], sets[1]);
     for(int i = 2; i<numSets; i++)
@@ -28,6 +26,7 @@ int main(){
     for(int i = 0; i<Cross.size(); i++)
 	    cout << Cross[i] << ", ";
     cout << "}\n";
+    
     delete [] sets;
     return 0;
 }

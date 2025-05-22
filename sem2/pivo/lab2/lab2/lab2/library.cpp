@@ -34,7 +34,7 @@ int checkString(string sets){
         if(sets[i] == '}')      closeF++;
         if(sets[i] == '<')      openS++;
         if(sets[i] == '>')      closeS++;
-	if(sets[i] == '\n') 	numSets;
+	if(sets[i] == '\n') 	numSets++;
 
         if(sets[i]==' ')        return -1;
     }
@@ -56,7 +56,6 @@ vector<string> parseString(int num, string str){
 
 	char* temp = strtok(str.data(), "\n");
 	while(temp){
-		cout << temp << endl;
 		sets.push_back(temp);
 		temp=strtok(NULL, "\n");
 	}
@@ -66,14 +65,46 @@ vector<string> parseString(int num, string str){
 
 vector<string> addSets(string str){
 	vector<string> set;
+	string temp;
 
-	char* temp = strtok(str.data(), ",");
-	while(temp){
-		cout << temp;
-		set.push_back(temp);
-		temp=strtok(NULL, ",");
+	int setCount = 0;
+	int tupeCount = 0;
+
+	for(char c: str){
+		if(c=='{'){
+			setCount++;
+			temp+=c;
+		} else if (c=='}'){
+			setCount--;
+			temp+=c;
+			if(setCount ==0){
+				set.push_back(temp);
+				temp.clear();
+			}
+		} 
+
+		if(c=='<'){
+			tupeCount++;
+			temp+=c;
+		} else if (c=='>'){
+			tupeCount--;
+			temp+=c;
+			if(setCount == 0){
+				set.push_back(temp);
+				temp.clear();
+			}
+		} else if(c==',' && setCount == 0 && tupeCount == 0){
+			if(!temp.empty()){
+				set.push_back(temp);
+				temp.clear();
+			}
+		} else {
+			temp+=c;
+		}
 	}
-	cout << endl;
+	if(!temp.empty()){
+		set.push_back(temp);
+	}
 	return set;
 }
 
@@ -86,9 +117,25 @@ vector<string> cross(vector<string> set1, vector<string> set2){
 
 	for(int i = 0; i<num1; i++){
 		for(int j = 0; j<num2; j++){
-			if((set1[i][0]=='{' && set2[j][0]=='{') || (set1[i][0]=='<' && set2[j][0]=='<'))
-				continue;
-			if(!strcmp(set1[i].data(), set2[j].data()))
+			if(set1[i][0]=='{' && set2[j][0]=='{'){
+				if(set1[i].length()!=set2[j].length())
+					continue;
+				else{
+					for(int k = 0; k<set1[i].length(); k++){
+						for(int l = 0; l<set2[j].length(); l++){
+							if(set1[i][k]=='{' || set1[i][k]==',' || set1[i][l]=='}')
+								break;
+							if(set1[i][k]==set2[j][l])
+								eq = 1;
+						}
+						if(eq){
+							cross.push_back(set1[i]);
+							eq = 0;
+						}
+					}
+				}
+			}
+		else if(!strcmp(set1[i].data(), set2[j].data()))
 				eq = 1;
 		}
 		if(eq){

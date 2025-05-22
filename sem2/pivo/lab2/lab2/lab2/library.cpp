@@ -166,7 +166,59 @@ string normalize(string& elem) {       // приводит строку в пр�
     }
 }
 
+string sortSet(string& input) {
+    vector<std::string> elements;
+    string temp;
+    int bracketCount = 0;  
+    int parenthesisCount = 0;  
 
+    for (char c : input) {
+        if (c == '{') {
+            bracketCount++;
+            if (bracketCount == 1 && !temp.empty()) {
+                elements.push_back(temp);
+                temp.clear();
+            }
+        } 
+        
+        temp += c;
+        
+        if (c == '}') {
+            bracketCount--;
+            if (bracketCount == 0) {
+                elements.push_back(temp);
+                temp.clear();
+            }
+        } else if (c == '(') {
+            parenthesisCount++;
+        } else if (c == ')') {
+            parenthesisCount--;
+        } else if (c == ',' && bracketCount == 0 && parenthesisCount == 0) {
+            elements.push_back(temp);
+            temp.clear();
+        }
+    }
+
+    if (!temp.empty()) {
+        elements.push_back(temp);
+    }
+
+    // Сортируем множества, НЕ затрагивая кортежи
+    sort(elements.begin(), elements.end(), [](const std::string& a, const std::string& b) {
+        bool isSetA = a.front() == '{' && a.back() == '}';
+        bool isSetB = b.front() == '{' && b.back() == '}';
+        if (isSetA != isSetB) return isSetB; // Множества идут после простых элементов
+        return a < b; // Лексикографическая сортировка
+    });
+
+    std::string result;
+    for (const auto& elem : elements) {
+        if (!result.empty()) result += ",";
+        result += elem;
+    }
+
+    return result;
+}
 
 vector<string> cross(vector<string> set1, vector<string> set2){
 	vector<string> cross;
@@ -176,11 +228,11 @@ vector<string> cross(vector<string> set1, vector<string> set2){
 	for(int i = 0; i<num1; i++){
 		for(int j =  0; j<num2; j++){
 			if(set1[i].front() == '{' || set1[i].front()=='<'){
-				normalize(set1[i]);
+				sortSet(set1[i]);
 			}
 
 			if(set2[j].front() == '{' || set2[j].front()=='<'){
-				normalize(set1[i]);
+				sortSet(set1[i]);
 			}
 
 			if(!strcmp(set1[i].data(), set2[j].data()))

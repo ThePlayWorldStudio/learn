@@ -1,7 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "library.h"         
 
-string readSets(const char* filename) {       // делит строку на элементы вектора через ,
+string readSets(const char* filename) { 
     FILE* file = fopen(filename, "r"); 
     
     if (!file) {
@@ -28,6 +28,7 @@ int checkString(string sets){
     int openS=0;
     int closeS=0;
     int numSets=0;
+    stack<char> skob;
 
     for(int i = 0; i<size; i++){
         if(sets[i] == '{')      openF++;
@@ -40,6 +41,21 @@ int checkString(string sets){
     }
 
     if(openF!=closeF || openS!=closeS)  return -1;
+
+    for(int i = 0; i<size; i++){
+	    if(sets[i]=='{' || sets[i]=='<'){
+		    skob.push(sets[i]);
+	    } else if(sets[i]=='}' || sets[i]=='>'){
+		    if(skob.empty()) return -1;
+		    char top = skob.top();
+		    if((sets[i]=='}' && top!='{') || (sets[i]=='>' && sets[i]=='<')) return -1;
+		    skob.pop();
+	    } else if(sets[i]==','){
+		    if(i==0 || i==sets.length()-1 || sets[i-1]==','|| sets[i+1]==','){
+			    return -1;
+		    }
+	    }
+    }
 
     return numSets;
 }
@@ -108,7 +124,7 @@ vector<string> addSets(string str){
 	return set;
 }
 
-string normalize(string& elem) {       // приводит строку в приличный вид
+string normalize(string& elem) { 
     if (elem.empty()) return "";
 
     if (elem.front() == '<' && elem.back() == '>') {
@@ -203,12 +219,11 @@ string sortSet(string& input) {
         elements.push_back(temp);
     }
 
-    // Сортируем множества, НЕ затрагивая кортежи
     sort(elements.begin(), elements.end(), [](const std::string& a, const std::string& b) {
         bool isSetA = a.front() == '{' && a.back() == '}';
         bool isSetB = b.front() == '{' && b.back() == '}';
-        if (isSetA != isSetB) return isSetB; // Множества идут после простых элементов
-        return a < b; // Лексикографическая сортировка
+        if (isSetA != isSetB) return isSetB;
+        return a < b; 
     });
 
     std::string result;

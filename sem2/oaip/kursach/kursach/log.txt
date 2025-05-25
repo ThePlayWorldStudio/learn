@@ -21,3 +21,27 @@ hteedbt        |	первое        	|74                  |	754       |	t hfghd
 mtef           |	второе        	|12                  |	509       |	rgs dg sd                                                                                           
 vij            |	десерт        	|35                  |	857       |	fhjgfuhg kjh jk                                                                                     
 ydfb           |	второе        	|63                  |	634       |	wrt wer sdfg sd                                                                                     
+
+### linear search by name ###
+Name:          type                time                calories            description                                                                                         
+
+### Sort by category ###
+Name:          type                time                calories            description                                                                                         
+
+### Sort by category ###
+Name:          type                time                calories            description                                                                                         
+
+### Bubble sort by name ###
+Name:          type                time                calories            description                                                                                         
+
+### quick sort by calories ###
+Name:          type                time                calories            description                                                                                         
+
+### Selection sort by time ###
+Name:          type                time                calories            description                                                                                         
+
+### linear search by name ###
+Name:          type                time                calories            description                                                                                         
+
+### Interpolated search by calories ###
+Name:          type                time                calories            description                                                                                         

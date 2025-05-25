@@ -66,6 +66,14 @@ void openNewFile(FILE *file, char *fileName){
     }
 }
 
+int chekIsEmpty(FILE* file, const char filename[100]){
+    file = fopen(filename, "r");
+    int num = countStructs(file);
+    fclose(file);
+
+    return num>0? 0: 1;
+}
+
 void add(FILE* log, FILE *file, char fileName[100]){
     Recipe dish;
     int n;
@@ -557,14 +565,26 @@ int main() {
                 break;
 
             case 2:
+                if(chekIsEmpty(file, fileName)){
+                    cout << "file is empty\n";
+                    break;
+                }
                 edit(log, file, fileName);
                 break;
 
             case 3:
+                if(chekIsEmpty(file, fileName)){
+                    cout << "file is empty\n";
+                    break;
+                }
                 delEl(log, file, fileName);
                 break;
 
             case 4:
+                if(chekIsEmpty(file, fileName)){
+                    cout << "file is empty\n";
+                    break;
+                }
                 cout << "enter number of sub-item: ";
                 cin >> WhatToDo;
                 switch(WhatToDo){
@@ -599,6 +619,10 @@ int main() {
             break;
                 
             case 5:
+                if(chekIsEmpty(file, fileName)){
+                    cout << "file is empty\n";
+                    break;
+                }
                 cout << "enter number of sub-item: ";
                 cin >> WhatToDo;
                 switch (WhatToDo){
@@ -623,6 +647,10 @@ int main() {
                 break;
 
             case 6:
+                if(chekIsEmpty(file, fileName)){
+                    cout << "file is empty\n";
+                    break;
+                }
                 dietprint(log, file, fileName);
                 break;
             

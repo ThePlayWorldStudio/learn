@@ -82,6 +82,11 @@ void openNewFile(FILE *file, char *fileName){
     }
 }
 
+int checkIsEmpty(FILE *file){
+    int num = countStructs(file);
+    return num>0?1 :0;
+}
+
 void add(FILE *file, char fileName[100]){
     Recipe dish;
     int n;

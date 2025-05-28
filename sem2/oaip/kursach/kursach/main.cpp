@@ -231,9 +231,9 @@ void selectionSort(Recipe *dishes, int n) {
             }
         }
         // Обмениваем текущий элемент и минимальный элемент
-        int temp = dishes[minIndex].time;
-        dishes[minIndex].time = dishes[i].time;
-        dishes[i].time = temp;
+        int temp = dishes[minIndex];
+        dishes[minIndex].time = dishes[i];
+        dishes[i] = temp;
     }
 }
 

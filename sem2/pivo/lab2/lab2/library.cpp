@@ -116,7 +116,8 @@ vector<string> addSets(string str){
 
 
 string sortSet(string& input) {
-    vector<string> elements;
+    vector<std::string> elements;
+    unordered_set<std::string> uniqueSets;
     string temp;
     int curlyBrackets = 0;
     int angleBrackets = 0;
@@ -137,6 +138,9 @@ string sortSet(string& input) {
         if ((c == '}' && curlyBrackets == 0) || (c == ',' && curlyBrackets == 0 && angleBrackets == 0)) {
             if (!temp.empty()) {
                 elements.push_back(temp);
+                if (temp.front() == '{' && temp.back() == '}') {
+                    uniqueSets.insert(temp); // Убираем повторы среди множества
+                }
                 temp.clear();
             }
         }
@@ -144,51 +148,30 @@ string sortSet(string& input) {
 
     if (!temp.empty()) {
         elements.push_back(temp);
-    }
-
-    // Сортируем только множества `{}`, но НЕ затрагиваем `< >`
-    for (auto& elem : elements) {
-        if (elem.front() == '{' && elem.back() == '}') {
-            vector<string> setElements;
-            string innerTemp;
-            int innerCurlyBrackets = 0;
-
-            for (char c : elem) {
-                if (c == '{') innerCurlyBrackets++;
-                if (c == '}') innerCurlyBrackets--;
-
-                innerTemp += c;
-
-                if ((c == '}' && innerCurlyBrackets == 0) || (c == ',' && innerCurlyBrackets == 0)) {
-                    setElements.push_back(innerTemp);
-                    innerTemp.clear();
-                }
-            }
-
-            if (!innerTemp.empty()) {
-                setElements.push_back(innerTemp);
-            }
-
-            sort(setElements.begin(), setElements.end());
-
-            elem = "{";
-            for (size_t i = 0; i < setElements.size(); i++) {
-                if (i > 0) elem += ",";
-                elem += setElements[i];
-            }
-            elem += "}";
+        if (temp.front() == '{' && temp.back() == '}') {
+            uniqueSets.insert(temp);
         }
     }
 
-    // Собираем результат
+    // Сортируем только множества `{}`, оставляем `< >` без изменений
+    vector<string> sortedSets(uniqueSets.begin(), uniqueSets.end());
+    sort(sortedSets.begin(), sortedSets.end());
+
+    // Формируем итоговую строку
     string result;
     for (const auto& elem : elements) {
         if (!result.empty()) result += ",";
-        result += elem;
+        if (elem.front() == '{' && elem.back() == '}') {
+            result += sortedSets.front();
+            sortedSets.erase(sortedSets.begin());
+        } else {
+            result += elem;
+        }
     }
 
     return result;
 }
+
 
 
 

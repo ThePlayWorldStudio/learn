@@ -116,7 +116,7 @@ vector<string> addSets(string str){
 
 
 string sortSet(string& input) {
-    vector<std::string> elements;
+    vector<string> elements;
     string temp;
     int curlyBrackets = 0;
     int angleBrackets = 0;
@@ -124,27 +124,21 @@ string sortSet(string& input) {
     for (char c : input) {
         if (c == '{') {
             curlyBrackets++;
-            temp += c;
         } else if (c == '}') {
             curlyBrackets--;
-            temp += c;
-            if (curlyBrackets == 0) {
-                elements.push_back(temp);
-                temp.clear();
-            }
         } else if (c == '<') {
             angleBrackets++;
-            temp += c;
         } else if (c == '>') {
             angleBrackets--;
-            temp += c;
-        } else if (c == ',' && curlyBrackets == 0) {
+        }
+
+        temp += c;
+
+        if ((c == '}' && curlyBrackets == 0) || (c == ',' && curlyBrackets == 0 && angleBrackets == 0)) {
             if (!temp.empty()) {
                 elements.push_back(temp);
                 temp.clear();
             }
-        } else {
-            temp += c;
         }
     }
 
@@ -152,15 +146,42 @@ string sortSet(string& input) {
         elements.push_back(temp);
     }
 
-    // Сортируем только те элементы, которые заключены в фигурные скобки
-    sort(elements.begin(), elements.end(), [](const std::string& a, const std::string& b) {
-        bool isSetA = a.front() == '{' && a.back() == '}';
-        bool isSetB = b.front() == '{' && b.back() == '}';
-        if (isSetA != isSetB) return false; // Не сортировать кортежи
-        return a < b;
-    });
+    // Сортируем только множества `{}`, но НЕ затрагиваем `< >`
+    for (auto& elem : elements) {
+        if (elem.front() == '{' && elem.back() == '}') {
+            vector<string> setElements;
+            string innerTemp;
+            int innerCurlyBrackets = 0;
 
-    std::string result;
+            for (char c : elem) {
+                if (c == '{') innerCurlyBrackets++;
+                if (c == '}') innerCurlyBrackets--;
+
+                innerTemp += c;
+
+                if ((c == '}' && innerCurlyBrackets == 0) || (c == ',' && innerCurlyBrackets == 0)) {
+                    setElements.push_back(innerTemp);
+                    innerTemp.clear();
+                }
+            }
+
+            if (!innerTemp.empty()) {
+                setElements.push_back(innerTemp);
+            }
+
+            sort(setElements.begin(), setElements.end());
+
+            elem = "{";
+            for (size_t i = 0; i < setElements.size(); i++) {
+                if (i > 0) elem += ",";
+                elem += setElements[i];
+            }
+            elem += "}";
+        }
+    }
+
+    // Собираем результат
+    string result;
     for (const auto& elem : elements) {
         if (!result.empty()) result += ",";
         result += elem;
@@ -168,6 +189,7 @@ string sortSet(string& input) {
 
     return result;
 }
+
 
 
 

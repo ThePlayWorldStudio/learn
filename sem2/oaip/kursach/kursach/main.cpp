@@ -37,8 +37,8 @@ void structWrite(FILE *file, Recipe *dishes, int num){
 }
 
 void printTitle(FILE *file){
-    fprintf(stdout, "%-15s%-20s%-20s%-20s%-100s\n", "Name:", "type", "time", "calories", "description");
-    fprintf(file, "%-15s%-20s%-20s%-20s%-100s\n", "Name:", "type", "time", "calories", "description");
+    fprintf(stdout, "%-15s\t%-20s\t%-20s\t%-20s\t%-100s\n", "Name:", "type", "time", "calories", "description");
+    fprintf(file, "%-15s\t%-20s\t%-20s\t%-20s\t%-100s\n", "Name:", "type", "time", "calories", "description");
 }
 
 int IsExistsFile(FILE* file, char fileName[100]){
@@ -231,8 +231,8 @@ void selectionSort(Recipe *dishes, int n) {
             }
         }
         // Обмениваем текущий элемент и минимальный элемент
-        int temp = dishes[minIndex];
-        dishes[minIndex].time = dishes[i];
+        Recipe temp = dishes[minIndex];
+        dishes[minIndex] = dishes[i];
         dishes[i] = temp;
     }
 }
@@ -435,7 +435,7 @@ void dietprint(FILE* log, FILE *file, char fileName[100]){
     delete [] dishes;
 }
 
-void linearSearch(FILE *file, FILE* log, Recipe *dishes, int num){
+void linearSearch(FILE* log, Recipe *dishes, int num){
     char name[100];
 
             cout << "Введите название рецепта: ";
@@ -446,17 +446,17 @@ void linearSearch(FILE *file, FILE* log, Recipe *dishes, int num){
             for(int i = 0; i<num; i++){
                 if(strcmp(dishes[i].name, name)==0){
                     fprintf(stdout, "%-15s|\t%-20s\t|%-20d|\t%-10d|\t%-100s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall,dishes[i].description);
-                    fprintf(file, "%-15s|\t%-20s\t|%-20d|\t%-10d|\t%-100s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall, dishes[i].description);
+                    fprintf(log, "%-15s|\t%-20s\t|%-20d|\t%-10d|\t%-100s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall, dishes[i].description);
                     return;
                 }
             }
-            cout << "not found";
+            cout << "not found\n";
 }
 
 void printForSort(FILE *file, int num, Recipe *dishes){
     for(int i = 0; i < num; i++) {
-        fprintf(stdout, "%-15s|\t%-20s\t|%-20d|\t%-10d|\t%-100s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall, dishes[i].description);
-        fprintf(file, "%-15s|\t%-20s\t|%-20d|\t%-10d|\t%-100s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall, dishes[i].description);
+        fprintf(stdout, "%-60s|\t%-20s\t|%-20d|\t%-20d|\t%-100s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall, dishes[i].description);
+        fprintf(file, "%-60s|\t%-20s\t|%-20d|\t%-20d|\t%-100s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall, dishes[i].description);
     }
 }
 
@@ -466,8 +466,7 @@ void printMessage(){
             "5 - поиски: \n\t5.1 - линейный \n\t5.2 - интерполяционный\n\t5.3 - выход\n\n"
             "6 - поиск диетического рецепта.\n"
             "7 - вывод меню\n"
-            "8 - выйти из программы\n"
-            "9 - вывести меню\n";
+            "8 - выйти из программы\n";
 }
 
 void printop(FILE* log, FILE* file, char fileName[100], int WhatToDo){
@@ -513,7 +512,7 @@ void printop(FILE* log, FILE* file, char fileName[100], int WhatToDo){
 
         case 8:
             fprintf(log, "\n### linear search by name ###\n");
-            linearSearch(file, log,  dishes, num);
+            linearSearch(log, dishes, num);
             break;
 
         case 9:

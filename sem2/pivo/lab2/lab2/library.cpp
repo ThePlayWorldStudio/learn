@@ -209,21 +209,13 @@ vector<string> cross(vector<string> set1, vector<string> set2){
 	int num2 = set2.size();
 
 	for(int i = 0; i<num1; i++){
-		cout << set1[i] << "i \n";
-	}
-	
-	for(int j = 0; j<num2; j++){
-		cout << set2[j] << "i \n";
-	}
-
-	for(int i = 0; i<num1; i++){
 		for(int j =  0; j<num2; j++){
 			if(set1[i].front() == '{' || set1[i].front()=='<'){
-				NormalizeElement(set1[i]);
+				set1[i] = normalizeElement(set1[i]);
 			}
 
 			if(set2[j].front() == '{' || set2[j].front()=='<'){
-				normalizeElement(set2[j]);
+				set2[j] = normalizeElement(set2[j]);
 			}
 
 			if(!strcmp(set1[i].data(), set2[j].data()))

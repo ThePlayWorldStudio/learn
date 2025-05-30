@@ -207,7 +207,7 @@ public:
     }
     
     void printNode(Node *node) const {
-        cout << node->key << node->string << '\n';
+        cout << node->key << " " << node->string << '\n';
     }
     
     void MinMax(){
@@ -279,7 +279,7 @@ private:
 
 int main() {
     Tree myTree;
-    cout << "1. add;\n2. delete;\n3. print string\n4. preorder\n5. in order\n6. postorder\n7. \n8. exit\n";
+    cout << "1. add;\n2. delete;\n3. print string\n4. preorder\n5. in order\n6. postorder\n7. swap min max\n8. exit\n";
     
     int iche;
     int isWork = 1;

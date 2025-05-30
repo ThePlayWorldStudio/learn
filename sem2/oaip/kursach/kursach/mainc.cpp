@@ -38,8 +38,8 @@ void structWrite(FILE *file, Recipe *dishes, int num){
 }
 
 void printTitle(FILE *file){
-    fprintf(stdout, "%-15s\t%-20s\t%-20s\t%-20s\t%-100s\n", "Name:", "type", "time", "calories", "description");
-    fprintf(file, "%-15s\t%-20s\t%-20s\t%-20s\t%-100s\n", "Name:", "type", "time", "calories", "description");
+    fprintf(stdout, "%-35s%-20s%-20s%-20s%-30s\n", "Name:", "type", "time", "calories", "description");
+    fprintf(file, "%-35s%-20s%-20s%-20s%-30s\n", "Name:", "type", "time", "calories", "description");
 }
 
 int IsExistsFile(FILE* file, char fileName[100]){
@@ -456,8 +456,13 @@ void linearSearch(FILE* log, Recipe *dishes, int num){
 
 void printForSort(FILE *file, int num, Recipe *dishes){
     for(int i = 0; i < num; i++) {
-        fprintf(stdout, "%-60s|\t%-20s\t|%-20d|\t%-20d|\t%-100s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall, dishes[i].description);
-        fprintf(file, "%-60s|\t%-20s\t|%-20d|\t%-20d|\t%-100s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall, dishes[i].description);
+        cout << setw(50) << dishes[i].name;
+        cout << setw(10) << dishes[i].type;
+        cout << setw(10) << dishes[i].time;
+        cout << setw(10) << dishes[i].kall;
+        cout << setw(100) << dishes[i].description << endl;
+        // fprintf(stdout, " %-50s | %-20s | %-10d\t| %-10d\t| %-30s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall, dishes[i].description);
+        // fprintf(file, " %-50s | %-20s | %-10d\t| %-10d\t| %-30s\n", dishes[i].name, dishes[i].type, dishes[i].time, dishes[i].kall, dishes[i].description);
     }
 }
 

@@ -185,33 +185,33 @@ string normalize(string& elem) {
 string sortSet(string& input) {
     vector<std::string> elements;
     string temp;
-    int bracketCount = 0;  
-    int parenthesisCount = 0;  
+    int curlyBrackets = 0;
+    int angleBrackets = 0;
 
     for (char c : input) {
         if (c == '{') {
-            bracketCount++;
-            if (bracketCount == 1 && !temp.empty()) {
+            curlyBrackets++;
+            temp += c;
+        } else if (c == '}') {
+            curlyBrackets--;
+            temp += c;
+            if (curlyBrackets == 0) {
                 elements.push_back(temp);
                 temp.clear();
             }
-        } 
-        
-        temp += c;
-        
-        if (c == '}') {
-            bracketCount--;
-            if (bracketCount == 0) {
+        } else if (c == '<') {
+            angleBrackets++;
+            temp += c;
+        } else if (c == '>') {
+            angleBrackets--;
+            temp += c;
+        } else if (c == ',' && curlyBrackets == 0) {
+            if (!temp.empty()) {
                 elements.push_back(temp);
                 temp.clear();
             }
-        } else if (c == '(') {
-            parenthesisCount++;
-        } else if (c == ')') {
-            parenthesisCount--;
-        } else if (c == ',' && bracketCount == 0 && parenthesisCount == 0) {
-            elements.push_back(temp);
-            temp.clear();
+        } else {
+            temp += c;
         }
     }
 
@@ -222,8 +222,8 @@ string sortSet(string& input) {
     sort(elements.begin(), elements.end(), [](const std::string& a, const std::string& b) {
         bool isSetA = a.front() == '{' && a.back() == '}';
         bool isSetB = b.front() == '{' && b.back() == '}';
-        if (isSetA != isSetB) return isSetB;
-        return a < b; 
+        if (isSetA != isSetB) return false; 
+        return a < b;
     });
 
     std::string result;
@@ -234,6 +234,7 @@ string sortSet(string& input) {
 
     return result;
 }
+
 
 vector<string> cross(vector<string> set1, vector<string> set2){
 	vector<string> cross;

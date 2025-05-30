@@ -80,107 +80,40 @@ vector<string> parseString(int num, string str){
 }
 
 vector<string> addSets(string str){
-	vector<string> set;
-	string temp;
+    vector<string> set;
+    string temp;
+    int setCount = 0;
+    int tupleCount = 0;
 
-	int setCount = 0;
-	int tupeCount = 0;
+    for(char c : str){
+        if(c == '{') {
+            setCount++;
+        } else if (c == '}') {
+            setCount--;
+        } else if(c == '<') {
+            tupleCount++;
+        } else if (c == '>') {
+            tupleCount--;
+        }
 
-	for(char c: str){
-		if(c=='{'){
-			setCount++;
-			temp+=c;
-		} else if (c=='}'){
-			setCount--;
-			temp+=c;
-			if(setCount ==0){
-				set.push_back(temp);
-				temp.clear();
-			}
-		} 
+        if (c == ',' && setCount == 0 && tupleCount == 0) {
+            // Разделяем элемент только если запятая ВНЕ множества/кортежа
+            if (!temp.empty()) {
+                set.push_back(temp);
+                temp.clear();
+            }
+        } else {
+            temp += c;
+        }
+    }
 
-		if(c=='<'){
-			tupeCount++;
-			temp+=c;
-		} else if (c=='>'){
-			tupeCount--;
-			temp+=c;
-			if(setCount == 0){
-				set.push_back(temp);
-				temp.clear();
-			}
-		} else if(c==',' && setCount == 0 && tupeCount == 0){
-			if(!temp.empty()){
-				set.push_back(temp);
-				temp.clear();
-			}
-		} else {
-			temp+=c;
-		}
-	}
-	if(!temp.empty()){
-		set.push_back(temp);
-	}
-	return set;
+    if (!temp.empty()) {
+        set.push_back(temp);
+    }
+    
+    return set;
 }
 
-string normalize(string& elem) { 
-    if (elem.empty()) return "";
-
-    if (elem.front() == '<' && elem.back() == '>') {
-        vector<string> inner = addSets(elem);
-        for (auto& it : inner) {
-            it = normalize(it);
-        }
-
-        string res = "<";
-        for (int i = 0; i < inner.size(); ++i) {
-            if (i > 0) res += ",";
-            res += inner[i];
-        }
-        res += ">";
-        return res;
-    }
-    else if (elem.front() == '{' && elem.back() == '}') {
-        vector<string> inner = addSets(elem);
-        vector<string> normalized; 
-
-        for (auto& it : inner)
-            normalized.push_back(normalize(it));
-
-        sort(normalized.begin(), normalized.end(), [](const string& a, const string& b) {
-            char first_a = a.front();
-            char first_b = b.front();
-
-            if (first_a == first_b) return a < b;
-            if (first_a == '{') return false;
-            if (first_b == '{') return true;
-            if (first_a == '<') return false;
-            if (first_b == '<') return true;
-            return a < b; 
-        });
-
-        if (normalized.size() == 1) {
-	    cout << normalized[0] << endl;
-            return normalized[0];
-        }
-
-        string result = "{";
-        for (int i = 0; i < normalized.size(); i++) {
-            if (i > 0) result += ",";
-            result += normalized[i];
-        }
-        result += "}";
-	cout << result << endl;
-        return result;
-    }
-    else {
-        string simple = elem;
-        simple.erase(remove_if(simple.begin(), simple.end(), ::isspace), simple.end());
-	cout << simple << endl;
-        return simple;
-    }
-}
 
 string sortSet(string& input) {
     vector<std::string> elements;

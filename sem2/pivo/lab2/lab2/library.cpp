@@ -115,63 +115,90 @@ vector<string> addSets(string str){
 }
 
 
-string sortSet(string& input) {
-    vector<std::string> elements;
-    unordered_set<std::string> uniqueSets;
-    string temp;
-    int curlyBrackets = 0;
-    int angleBrackets = 0;
+vector<string> parseElements(const string& element) {
+    vector<string> elements;
+    if (element.empty() || element.size() < 2) return elements;
 
-    for (char c : input) {
-        if (c == '{') {
-            curlyBrackets++;
-        } else if (c == '}') {
-            curlyBrackets--;
-        } else if (c == '<') {
-            angleBrackets++;
-        } else if (c == '>') {
-            angleBrackets--;
-        }
+    int depth = 0, start = 1;
 
-        temp += c;
+    for (int i = 1; i < element.size() - 1; i++) {
+        char c = element[i];
+        if (c == '{' || c == '<') depth++;
+        else if (c == '}' || c == '>') depth--;
 
-        if ((c == '}' && curlyBrackets == 0) || (c == ',' && curlyBrackets == 0 && angleBrackets == 0)) {
-            if (!temp.empty()) {
-                elements.push_back(temp);
-                if (temp.front() == '{' && temp.back() == '}') {
-                    uniqueSets.insert(temp); // Убираем повторы среди множества
-                }
-                temp.clear();
-            }
+        if (depth == 0 && c == ',') {
+            string elem = element.substr(start, i - start);
+            elem.erase(0, elem.find_first_not_of(" \t"));
+            elem.erase(elem.find_last_not_of(" \t") + 1);
+            if (!elem.empty())
+                elements.push_back(elem);
+            start = i + 1;
         }
     }
 
-    if (!temp.empty()) {
-        elements.push_back(temp);
-        if (temp.front() == '{' && temp.back() == '}') {
-            uniqueSets.insert(temp);
-        }
-    }
+    string lastElem = element.substr(start, element.size() - 1 - start);
+    lastElem.erase(0, lastElem.find_first_not_of(" \t"));
+    lastElem.erase(lastElem.find_last_not_of(" \t") + 1);
+    if (!lastElem.empty())
+        elements.push_back(lastElem);
 
-    // Сортируем только множества `{}`, оставляем `< >` без изменений
-    vector<string> sortedSets(uniqueSets.begin(), uniqueSets.end());
-    sort(sortedSets.begin(), sortedSets.end());
-
-    // Формируем итоговую строку
-    string result;
-    for (const auto& elem : elements) {
-        if (!result.empty()) result += ",";
-        if (elem.front() == '{' && elem.back() == '}') {
-            result += sortedSets.front();
-            sortedSets.erase(sortedSets.begin());
-        } else {
-            result += elem;
-        }
-    }
-
-    return result;
+    return elements;
 }
 
+string normalizeElement(const string& elem) {       // приводит строку в приличный вид
+    if (elem.empty()) return "";
+
+    if (elem.front() == '<' && elem.back() == '>') {
+        vector<string> inner = parseElements(elem);
+        for (auto& it : inner) {
+            it = normalizeElement(it);
+        }
+
+        string res = "<";
+        for (int i = 0; i < inner.size(); ++i) {
+            if (i > 0) res += ",";
+            res += inner[i];
+        }
+        res += ">";
+        return res;
+    }
+    else if (elem.front() == '{' && elem.back() == '}') {
+        vector<string> inner = parseElements(elem);
+        vector<string> normalized;
+
+        for (auto& it : inner)
+            normalized.push_back(normalizeElement(it));
+
+        sort(normalized.begin(), normalized.end(), [](const string& a, const string& b) {
+            char first_a = a.front();
+            char first_b = b.front();
+
+            if (first_a == first_b) return a < b;
+            if (first_a == '{') return false;
+            if (first_b == '{') return true;
+            if (first_a == '<') return false;
+            if (first_b == '<') return true;
+            return a < b;
+        });
+
+        if (normalized.size() == 1) {
+            return normalized[0];
+        }
+
+        string result = "{";
+        for (int i = 0; i < normalized.size(); i++) {
+            if (i > 0) result += ",";
+            result += normalized[i];
+        }
+        result += "}";
+        return result;
+    }
+    else {
+        string simple = elem;
+        simple.erase(remove_if(simple.begin(), simple.end(), ::isspace), simple.end());
+        return simple;
+    }
+}
 
 
 
@@ -192,11 +219,11 @@ vector<string> cross(vector<string> set1, vector<string> set2){
 	for(int i = 0; i<num1; i++){
 		for(int j =  0; j<num2; j++){
 			if(set1[i].front() == '{' || set1[i].front()=='<'){
-				set1[i] = sortSet(set1[i]);
+				NormalizeElement(set1[i]);
 			}
 
 			if(set2[j].front() == '{' || set2[j].front()=='<'){
-				set2[j] = sortSet(set2[j]);
+				normalizeElement(set2[j]);
 			}
 
 			if(!strcmp(set1[i].data(), set2[j].data()))

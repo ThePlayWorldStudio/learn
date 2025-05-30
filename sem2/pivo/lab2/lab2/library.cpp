@@ -184,7 +184,6 @@ string normalize(string& elem) {
 
 string sortSet(string& input) {
     vector<std::string> elements;
-    unordered_set<std::string> uniqueSets;
     string temp;
     int curlyBrackets = 0;
     int angleBrackets = 0;
@@ -192,48 +191,46 @@ string sortSet(string& input) {
     for (char c : input) {
         if (c == '{') {
             curlyBrackets++;
+            temp += c;
         } else if (c == '}') {
             curlyBrackets--;
-        } else if (c == '<') {
-            angleBrackets++;
-        } else if (c == '>') {
-            angleBrackets--;
-        }
-
-        temp += c;
-
-        if ((c == '}' && curlyBrackets == 0) || (c == ',' && curlyBrackets == 0 && angleBrackets == 0)) {
-            if (!temp.empty()) {
+            temp += c;
+            if (curlyBrackets == 0) {
                 elements.push_back(temp);
-                if (temp.front() == '{' && temp.back() == '}') {
-                    uniqueSets.insert(temp); // Убираем повторы среди множества
-                }
                 temp.clear();
             }
+        } else if (c == '<') {
+            angleBrackets++;
+            temp += c;
+        } else if (c == '>') {
+            angleBrackets--;
+            temp += c;
+        } else if (c == ',' && curlyBrackets == 0) {
+            if (!temp.empty()) {
+                elements.push_back(temp);
+                temp.clear();
+            }
+        } else {
+            temp += c;
         }
     }
 
     if (!temp.empty()) {
         elements.push_back(temp);
-        if (temp.front() == '{' && temp.back() == '}') {
-            uniqueSets.insert(temp);
-        }
     }
 
-    // Сортируем только множества `{}`, оставляем `< >` без изменений
-    vector<string> sortedSets(uniqueSets.begin(), uniqueSets.end());
-    sort(sortedSets.begin(), sortedSets.end());
+    // Сортируем только те элементы, которые заключены в фигурные скобки
+    sort(elements.begin(), elements.end(), [](const std::string& a, const std::string& b) {
+        bool isSetA = a.front() == '{' && a.back() == '}';
+        bool isSetB = b.front() == '{' && b.back() == '}';
+        if (isSetA != isSetB) return false; // Не сортировать кортежи
+        return a < b;
+    });
 
-    // Формируем итоговую строку
-    string result;
+    std::string result;
     for (const auto& elem : elements) {
         if (!result.empty()) result += ",";
-        if (elem.front() == '{' && elem.back() == '}') {
-            result += sortedSets.front();
-            sortedSets.erase(sortedSets.begin());
-        } else {
-            result += elem;
-        }
+        result += elem;
     }
 
     return result;

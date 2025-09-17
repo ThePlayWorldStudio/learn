@@ -1,8 +1,11 @@
+import org.testng.annotations.Test;
+import static org.testng.Assert.assertEquals;
+
 public class Main{
 	public static void main(String[] args) {
-		Vector vector = new Vector();
-		Turing turing = new Turing();
-		vector.print();
-		turing.print();
+		Vector vector1 = new Vector(1, 2, 3);
+		Vector vector2 = new Vector(3, 2, 1);
+	
+		
 	}
-}
+}	

@@ -12,8 +12,9 @@ public class Vector{
 		for(int i = 0; i<3; i++){
 			System.out.print(coords[i]);
 		}
+		System.out.println();
 	}
-	public double[] coords(){
+	public double[] Coords(){
 		return coords;
 	}
 

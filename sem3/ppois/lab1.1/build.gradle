@@ -1,0 +1,55 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+}
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+}
+
+
+test {
+    useJUnit()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+    finalizedBy jacocoTestReport
+}
+
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+	html.enabled = false
+    }
+
+    doLast {
+        def xmlReport = file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+	if (xmlReport.exists()) {
+	    def xml = new XmlSlurper().parse(xmlReport)
+	    def counters = xml.counter
+	    counters.each { counter ->
+		def type = counter.@type
+		def covered = counter.@covered.toInteger()
+		def missed = counter.@missed.toInteger()
+		def total = covered + missed
+		def percentage = total > 0 ? (covered / total * 100).round(2) : 0
+		println "Coverage fo ${type}: ${covered}/${total} (${percentage}%)"}
+	} else {
+		println "report not found"
+		}
+	}
+}
+
+tasks.withType(Test) {
+	systemProperty 'javax.xml.parsers.SAXParserFactory', 'com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl'
+	systemProperty 'org.xml.sax.driver', 'com.sun.org.apache.xerces.internal.parsers.SAXParser'
+}

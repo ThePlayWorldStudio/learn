@@ -1,0 +1,3 @@
+[submodule "sem3/os/lab2"]
+	path = sem3/os/lab2
+	url = https://github.com/ThePlayWorldStudio/osbruh.git

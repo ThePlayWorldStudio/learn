@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Vector.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">lab1.2</a> &gt; <a href="index.source.html" class="el_package">my.vector</a> &gt; <span class="el_source">Vector.java</span></div><h1>Vector.java</h1><pre class="source lang-java linenums">package my.vector;
+
+public class Vector {
+
+<span class="fc" id="L5">	double[] coords = new double[3];</span>
+
+<span class="fc" id="L7">	public Vector(double x, double y, double z){</span>
+<span class="fc" id="L8">		this.coords[0] = x;</span>
+<span class="fc" id="L9">		this.coords[1] = y;</span>
+<span class="fc" id="L10">		this.coords[2] = z;</span>
+<span class="fc" id="L11">	}</span>
+
+
+
+	public void PrintCoords(){
+<span class="nc bnc" id="L16" title="All 2 branches missed.">		for(int i = 0; i&lt;3; i++){</span>
+<span class="nc" id="L17">			System.out.print(coords[i]);</span>
+		}
+<span class="nc" id="L19">		System.out.println();</span>
+<span class="nc" id="L20">	}</span>
+	public double[] Coords(){
+<span class="fc" id="L22">		return coords;</span>
+	}
+
+	public void plus(Vector vec2){
+<span class="fc bfc" id="L26" title="All 2 branches covered.">		for(int i = 0; i&lt;3; i++){</span>
+<span class="fc" id="L27">			this.coords[i] += vec2.coords[i];</span>
+		}
+<span class="fc" id="L29">	}</span>
+
+	public void minus(Vector vec2){
+<span class="fc bfc" id="L32" title="All 2 branches covered.">		for(int i = 0; i&lt;3; i++){</span>
+<span class="fc" id="L33">			this.coords[i] -= vec2.coords[i];</span>
+		}
+<span class="fc" id="L35">	}</span>
+
+	public double scalMultiply(Vector vec2){
+<span class="fc" id="L38">		double answ = 0;</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">		for(int i = 0; i&lt;3; i++){</span>
+<span class="fc" id="L40">			answ += this.coords[i] * vec2.coords[i];</span>
+		}
+<span class="fc" id="L42">		return answ;</span>
+	}
+
+	public double scalMultiply(double koef){
+<span class="fc" id="L46">		double answ = 0;</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">		for(int i = 0; i&lt;3; i++){</span>
+<span class="fc" id="L48">			answ += this.coords[i] * koef;</span>
+		}
+<span class="fc" id="L50">		return answ;</span>
+	}
+
+	public double divide(Vector vec2){
+<span class="fc" id="L54">		double answ = 0;</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">		for(int i = 0; i&lt;3; i++){</span>
+<span class="fc" id="L56">			answ += this.coords[i] / vec2.coords[i];</span>
+		}
+<span class="fc" id="L58">		return answ;</span>
+	}	
+
+	public double divide(double koeff){
+<span class="fc" id="L62">		double answ = 0;</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">		for(int i = 0; i&lt;3; i++){</span>
+<span class="fc" id="L64">			answ += this.coords[i] / koeff;</span>
+		}
+<span class="fc" id="L66">		return answ;</span>
+	}
+
+	private double length(){
+<span class="nc" id="L70">		double answ = 0;</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">		for(int i = 0; i&lt;3; i++){</span>
+<span class="nc" id="L72">			answ += this.coords[i]*this.coords[i];</span>
+		}
+<span class="nc" id="L74">		return Math.sqrt(answ);</span>
+	}
+
+	public double cosinus(Vector vec2){
+<span class="nc" id="L78">		return this.scalMultiply(vec2)/(this.length()*vec2.length());</span>
+	}
+
+	public boolean bigger(Vector vec2){
+<span class="nc bnc" id="L82" title="All 2 branches missed.">		if(this.length()&gt;vec2.length()){</span>
+<span class="nc" id="L83">			return true;</span>
+		} else {
+<span class="nc" id="L85">			return false;</span>
+		}
+	
+	}
+
+	public boolean equal(Vector vec2){
+<span class="nc bnc" id="L91" title="All 2 branches missed.">		if(this.length()==vec2.length()){</span>
+<span class="nc" id="L92">			return true;</span>
+		} else {
+<span class="nc" id="L94">			return false;</span>
+		}
+	}
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

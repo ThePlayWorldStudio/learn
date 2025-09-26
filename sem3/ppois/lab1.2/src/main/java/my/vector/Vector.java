@@ -34,7 +34,7 @@ public class Vector {
 		}
 	}
 
-	public double scalmultiply(Vector vec2){
+	public double scalMultiply(Vector vec2){
 		double answ = 0;
 		for(int i = 0; i<3; i++){
 			answ += this.coords[i] * vec2.coords[i];
@@ -42,7 +42,7 @@ public class Vector {
 		return answ;
 	}
 
-	public double scalmultiply(double koef){
+	public double scalMultiply(double koef){
 		double answ = 0;
 		for(int i = 0; i<3; i++){
 			answ += this.coords[i] * koef;
@@ -53,10 +53,18 @@ public class Vector {
 	public double divide(Vector vec2){
 		double answ = 0;
 		for(int i = 0; i<3; i++){
-			answ += this.coords[i] * vec2.coords[i];
+			answ += this.coords[i] / vec2.coords[i];
 		}
 		return answ;
 	}	
+
+	public double divide(double koeff){
+		double answ = 0;
+		for(int i = 0; i<3; i++){
+			answ += this.coords[i] / koeff;
+		}
+		return answ;
+	}
 
 	private double length(){
 		double answ = 0;
@@ -67,7 +75,7 @@ public class Vector {
 	}
 
 	public double cosinus(Vector vec2){
-		return this.scalmultiply(vec2)/(this.length()*vec2.length());
+		return this.scalMultiply(vec2)/(this.length()*vec2.length());
 	}
 
 	public boolean bigger(Vector vec2){

@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="Tests" tests="2" skipped="0" failures="0" errors="0" timestamp="2025-09-20T10:31:18" hostname="/0:0:0:0:0:0:0:1%lo" time="0.082">
+<testsuite name="Tests" tests="7" skipped="0" failures="0" errors="0" timestamp="2025-09-25T10:04:52" hostname="/0:0:0:0:0:0:0:1%lo" time="0.096">
   <properties/>
-  <testcase name="test" classname="Tests" time="0.008"/>
-  <testcase name="testCoords" classname="Tests" time="0.07"/>
+  <testcase name="testDivideKoeff" classname="Tests" time="0.046"/>
+  <testcase name="testMinus" classname="Tests" time="0.018"/>
+  <testcase name="testPlus" classname="Tests" time="0.003"/>
+  <testcase name="testDivideVector" classname="Tests" time="0.0"/>
+  <testcase name="testMultiplyVector" classname="Tests" time="0.0"/>
+  <testcase name="testCoords" classname="Tests" time="0.0"/>
+  <testcase name="testMultiplyKoeff" classname="Tests" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

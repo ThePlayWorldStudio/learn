@@ -1,0 +1,42 @@
+rrel_packet_header
+=> nrel_method_idtf:
+   [заголовок пакета']
+   (*
+      <- lang_ru
+   *);
+
+=> nrel_method_idtf:
+   [packet header']
+   (*
+      <- lang_en
+   *);
+
+=> rrel_explored_relation:
+   subject_domain_of_network_prototcols;
+
+=> nrel_definitional_domain:
+   ...
+   (*
+      <= nrel_set_union: {
+         network_packet;
+         information_about_packet
+      };;
+   *);
+
+=> nrel_first_domain:
+   network_packet;
+
+=> nrel_second_domain:
+   information_about_packet;
+
+=> nrel_inclusion:
+   rrel_ip_packet_header;
+   rrel_tcp_packet_header;
+   rrel_udp_packet_header;
+
+=> nrel_definition:
+   [Заголовок пакета - это часть сетевого пакета, которая сожержит управляющую информацию, необходимую для маршрутизации, доставки и обработки информации.]
+   (*
+      <- lang_ru
+   *);;
+   

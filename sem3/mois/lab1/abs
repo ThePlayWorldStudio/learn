@@ -1,0 +1,27 @@
+concept_port
+=> nrel_main_idtf:
+   [порт]
+   (*
+      <- lang_ru
+   *);
+
+=> nrel_main_idtf:
+   [port]
+   (*
+      <- lang_en
+   *);
+
+<- rrel_explored_relation:
+   subject_domain_of_network_protocols;
+
+=> nrel_inclusion:
+   concept_open_port;
+   concept_well_known_port;
+   concept_private_port;
+   concept_dynamic_port;
+
+=> nrel_definition:
+   [Порт - это числовой идентификатор, используемый на транспортном уровне (TCP/UDP), чтобы различать приложения и службы на одном устройстве.]
+   (*
+      <- lang_ru
+   *);;

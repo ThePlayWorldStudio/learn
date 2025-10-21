@@ -6,7 +6,7 @@ import static org.junit.Assert.assertArrayEquals;
 
 import my.vector.Vector;
 
-public class Tests {
+public class VectorTests {
 	
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Test

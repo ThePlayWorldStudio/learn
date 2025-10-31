@@ -1,0 +1,147 @@
+subject_domain_of_network_protocols
+=> nrel_main_idtf:
+   [Предметная область сетевых протоколов]
+   (*
+      <- lang_ru;;
+   *);
+<- concept_subject_domain;
+=> nrel_ontology:
+   structural_specification_of_subject_domain_of_network_protocols;
+   set_theoretic_ontology_of_subject_domain_of_network_protocols;;
+
+structural_specification_of_subject_domain_of_network_protocols = [*
+<- concept_structural_specification_of_subject_domain;;
+
+subject_domain_of_network_protocols = [*
+-> rrel_maximum_studied_object_class:
+   concept_protocol;
+
+-> rrel_not_maximum_studied_object_class:
+   concept_protocol_layer;
+   concept_packet;
+   concept_header;
+   concept_segment;
+   concept_datagram;
+   concept_frame;
+   concept_port;
+
+-> rrel_explored_relation:
+   nrel_encapsulates;
+   nrel_provides_service_to;
+   nrel_uses_service_of;
+   nrel_has_header_field;
+   nrel_has_checksum;
+   nrel_has_source_address;
+   nrel_has_destination_address;
+   nrel_has_source_port;
+   nrel_has_destination_port;
+   nrel_supports_reliability;
+   nrel_supports_ordering;
+   nrel_supports_flow_control;
+   nrel_supports_congestion_control;
+   nrel_is_connection_oriented;
+   nrel_is_connectionless;
+*];
+<= nrel_child_subject_domain:
+   subject_domain_of_computer_networks;
+=> nrel_child_subject_domain:
+   subject_domain_of_internet_protocol_suite;
+   subject_domain_of_application_layer_protocols;
+   subject_domain_of_transport_layer_protocols;
+   subject_domain_of_network_layer_protocols;;
+*];;
+
+subject_domain_of_network_protocols = [*
+protocol_TCP
+<- concept_transport_protocol;
+=> nrel_is_connection_oriented: sc_true;
+-> rrel_has_header_field:
+   source_port_TCP;
+   destination_port_TCP;
+   checksum_TCP;
+=> nrel_supports_reliability: sc_true;
+=> nrel_supports_ordering: sc_true;
+=> nrel_supports_flow_control: sc_true;
+=> nrel_supports_congestion_control: sc_true;;
+
+protocol_UDP
+<- concept_transport_protocol;
+=> nrel_is_connectionless: sc_true;
+-> rrel_has_header_field:
+   source_port_UDP;
+   destination_port_UDP;
+   checksum_UDP;
+=> nrel_supports_reliability: sc_false;
+=> nrel_supports_ordering: sc_false;;
+
+protocol_IP
+<- concept_network_protocol;
+-> rrel_has_header_field:
+   checksum_IP;
+   source_ip_address;
+   destination_ip_address;
+=> nrel_encapsulates:
+   protocol_TCP;
+   protocol_UDP;
+=> nrel_is_connectionless: sc_true;
+=> nrel_provides_service_to:
+   protocol_TCP;
+   protocol_UDP;;
+
+protocol_HTTP
+<- concept_application_protocol;
+=> nrel_uses_service_of:
+   protocol_TCP;
+-> rrel_has_header_field:
+   host_header;
+   content_type_header;
+   content_length_header;;
+*];;
+
+set_theoretic_ontology_of_subject_domain_of_network_protocols = [*
+<- concept_set_theoretic_ontology_of_subject_domain;;
+
+concept_protocol
+=> nrel_subdividing: {
+   concept_application_protocol;
+   concept_transport_protocol;
+   concept_network_protocol
+};;
+
+concept_protocol_layer
+=> nrel_subdividing: {
+   concept_application_layer;
+   concept_transport_layer;
+   concept_network_layer
+};;
+
+concept_packet
+=> nrel_subdividing: {
+   concept_frame;
+   concept_datagram;
+   concept_segment
+};;
+
+nrel_provides_service_to
+=> nrel_inclusion:
+   nrel_uses_service_of;;
+
+nrel_has_header_field
+=> nrel_subdividing: {
+   nrel_has_source_address;
+   nrel_has_destination_address;
+   nrel_has_source_port;
+   nrel_has_destination_port;
+   nrel_has_checksum
+};;
+
+nrel_is_connection_oriented
+=> nrel_inclusion:
+   nrel_is_connectionless;;
+
+nrel_supports_reliability
+=> nrel_inclusion:
+   nrel_supports_ordering;
+   nrel_supports_flow_control;
+   nrel_supports_congestion_control;;
+*];;

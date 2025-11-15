@@ -50,5 +50,8 @@
         "unordered_map": "cpp",
         "variant": "cpp",
         "algorithm": "cpp"
-    }
+    },
+    "python.analysis.extraPaths": [
+        "./sem3/ppois/ppois/lab1/src"
+    ]
 }

@@ -1,3 +1,6 @@
 [submodule "sem3/os/lab2"]
 	path = sem3/os/labother
 	url = https://github.com/ThePlayWorldStudio/osbruh.git
+[submodule "sem3/ppois/ppois"]
+	path = sem3/ppois/ppois
+	url = https://github.com/tapo-o/ppois.git

@@ -1,0 +1,332 @@
+concept_network_protocol
+<- sc_node_class;
+=> nrel_main_idtf:
+   [сетевой протокол*]
+   (* <- lang_ru;; *);;
+
+concept_osi_layer
+<- sc_node_class;
+=> nrel_main_idtf:
+   [уровень модели OSI*]
+   (* <- lang_ru;; *);;
+
+layer2_data_link
+<- concept_osi_layer;
+=> nrel_main_idtf:
+   [канальный уровень*]
+   (* <- lang_ru;; *);
+-> nrel_order:
+   sc_node_const_num: 2;;
+
+layer3_network
+<- concept_osi_layer;
+=> nrel_main_idtf:
+   [сетевой уровень*]
+   (* <- lang_ru;; *);
+-> nrel_order:
+   sc_node_const_num: 3;;
+
+layer4_transport
+<- concept_osi_layer;
+=> nrel_main_idtf:
+   [транспортный уровень*]
+   (* <- lang_ru;; *);
+-> nrel_order:
+   sc_node_const_num: 4;;
+
+layer7_application
+<- concept_osi_layer;
+=> nrel_main_idtf:
+   [прикладной уровень*]
+   (* <- lang_ru;; *);
+-> nrel_order:
+   sc_node_const_num: 7;;
+
+nrel_belongs_to_layer
+<- sc_node_nrel;
+=> nrel_main_idtf:
+   [принадлежит к уровню*]
+   (* <- lang_ru;; *);
+=> nrel_first_domain:
+   concept_network_protocol;
+=> nrel_second_domain:
+   concept_osi_layer;;
+
+nrel_uses_transport
+<- sc_node_nrel;
+=> nrel_main_idtf:
+   [использует транспорт*]
+   (* <- lang_ru;; *);
+=> nrel_first_domain:
+   concept_network_protocol;
+=> nrel_second_domain:
+   concept_network_protocol;;
+
+nrel_standard_port
+<- sc_node_nrel;
+=> nrel_main_idtf:
+   [стандартный порт*]
+   (* <- lang_ru;; *);
+=> nrel_first_domain:
+   concept_network_protocol;
+=> nrel_second_domain:
+   sc_node_const_num;;
+
+nrel_runs_over
+<- sc_node_nrel;
+=> nrel_main_idtf:
+   [работает поверх*]
+   (* <- lang_ru;; *);
+=> nrel_first_domain:
+   concept_network_protocol;
+=> nrel_second_domain:
+   concept_network_protocol;;
+
+nrel_has_rfc
+<- sc_node_nrel;
+=> nrel_main_idtf:
+   [RFC*]
+   (* <- lang_ru;; *);
+=> nrel_first_domain:
+   concept_network_protocol;
+=> nrel_second_domain:
+   sc_node_const_str;;
+
+nrel_connection_oriented
+<- sc_node_nrel;
+=> nrel_main_idtf:
+   [ориентирован на соединение*]
+   (* <- lang_ru;; *);
+=> nrel_first_domain:
+   concept_network_protocol;
+=> nrel_second_domain:
+   sc_node_const_bool;;
+
+nrel_encrypted_variant
+<- sc_node_nrel;
+=> nrel_main_idtf:
+   [шифрованный вариант*]
+   (* <- lang_ru;; *);
+=> nrel_first_domain:
+   concept_network_protocol;
+=> nrel_second_domain:
+   concept_network_protocol;;
+
+nrel_reliable
+<- sc_node_nrel;
+=> nrel_main_idtf:
+   [надёжный*]
+   (* <- lang_ru;; *);
+=> nrel_first_domain:
+   concept_network_protocol;
+=> nrel_second_domain:
+   sc_node_const_bool;;
+
+nrel_version
+<- sc_node_nrel;
+=> nrel_main_idtf:
+   [версия*]
+   (* <- lang_ru;; *);
+=> nrel_first_domain:
+   concept_network_protocol;
+=> nrel_second_domain:
+   sc_node_const_str;;
+
+// Протоколы
+
+Ethernet
+<- concept_network_protocol;
+=> nrel_main_idtf:
+   [Ethernet*]
+   (* <- lang_ru;; *);
+=> nrel_belongs_to_layer:
+   layer2_data_link;
+-> nrel_has_rfc:
+   sc_node_const_str: RFC 894;;
+
+IP
+<- concept_network_protocol;
+=> nrel_main_idtf:
+   [IP*]
+   (* <- lang_ru;; *);
+=> nrel_belongs_to_layer:
+   layer3_network;
+-> nrel_runs_over:
+   Ethernet;
+-> nrel_has_rfc:
+   sc_node_const_str: RFC 791;;
+-> nrel_has_rfc:
+   sc_node_const_str: RFC 2460;;
+
+IPv4
+<- concept_network_protocol;
+<= nrel_version:
+   IP;;
+=> nrel_main_idtf:
+   [IPv4*]
+   (* <- lang_ru;; *);
+-> nrel_version:
+   sc_node_const_str: 4;;
+
+IPv6
+<- concept_network_protocol;
+<= nrel_version:
+   IP;;
+=> nrel_main_idtf:
+   [IPv6*]
+   (* <- lang_ru;; *);
+-> nrel_version:
+   sc_node_const_str: 6;;
+
+TCP
+<- concept_network_protocol;
+=> nrel_main_idtf:
+   [TCP*]
+   (* <- lang_ru;; *);
+=> nrel_belongs_to_layer:
+   layer4_transport;
+-> nrel_runs_over:
+   IP;
+-> nrel_connection_oriented:
+   sc_true;;
+-> nrel_reliable:
+   sc_true;;
+-> nrel_has_rfc:
+   sc_node_const_str: RFC 9293;;
+
+UDP
+<- concept_network_protocol;
+=> nrel_main_idtf:
+   [UDP*]
+   (* <- lang_ru;; *);
+=> nrel_belongs_to_layer:
+   layer4_transport;
+-> nrel_runs_over:
+   IP;
+-> nrel_connection_oriented:
+   sc_false;;
+-> nrel_reliable:
+   sc_false;;
+-> nrel_has_rfc:
+   sc_node_const_str: RFC 768;;
+
+HTTP
+<- concept_network_protocol;
+=> nrel_main_idtf:
+   [HTTP*]
+   (* <- lang_ru;; *);
+=> nrel_belongs_to_layer:
+   layer7_application;
+-> nrel_uses_transport:
+   TCP;;
+-> nrel_standard_port:
+   sc_node_const_num: 80;;
+-> nrel_runs_over:
+   TCP;;
+-> nrel_has_rfc:
+   sc_node_const_str: RFC 9110;;
+-> nrel_has_rfc:
+   sc_node_const_str: RFC 9111;;
+
+HTTPS
+<- concept_network_protocol;
+<= nrel_encrypted_variant:
+   HTTP;;
+=> nrel_main_idtf:
+   [HTTPS*]
+   (* <- lang_ru;; *);
+=> nrel_belongs_to_layer:
+   layer7_application;
+-> nrel_uses_transport:
+   TCP;;
+-> nrel_standard_port:
+   sc_node_const_num: 443;;
+-> nrel_runs_over:
+   TCP;;
+-> nrel_has_rfc:
+   sc_node_const_str: RFC 2818;;
+
+DNS
+<- concept_network_protocol;
+=> nrel_main_idtf:
+   [DNS*]
+   (* <- lang_ru;; *);
+=> nrel_belongs_to_layer:
+   layer7_application;
+-> nrel_uses_transport:
+   TCP;;
+-> nrel_uses_transport:
+   UDP;;
+-> nrel_standard_port:
+   sc_node_const_num: 53;;
+-> nrel_runs_over:
+   TCP;;
+-> nrel_runs_over:
+   UDP;;
+-> nrel_has_rfc:
+   sc_node_const_str: RFC 1035;;
+
+// Иерархия через inclusion и subdividing (как в репо)
+
+concept_transport_protocol
+<- concept_network_protocol;
+=> nrel_main_idtf:
+   [транспортный протокол*]
+   (* <- lang_ru;; *);
+-> nrel_inclusion:
+   TCP;;
+-> nrel_inclusion:
+   UDP;;
+
+concept_application_protocol
+<- concept_network_protocol;
+=> nrel_main_idtf:
+   [прикладной протокол*]
+   (* <- lang_ru;; *);
+-> nrel_inclusion:
+   HTTP;;
+-> nrel_inclusion:
+   HTTPS;;
+-> nrel_inclusion:
+   DNS;;
+
+nrel_transport_protocol
+<- sc_node_nrel;
+=> nrel_subdividing:
+   nrel_uses_transport;;
+
+nrel_runs_over
+=> nrel_subdividing:
+   nrel_carries;;
+
+nrel_carries
+<- sc_node_nrel;
+=> nrel_main_idtf:
+   [несёт*]
+   (* <- lang_ru;; *);
+=> nrel_first_domain:
+   concept_network_protocol;
+=> nrel_second_domain:
+   concept_network_protocol;;
+
+// Обратные связи и группировка через последовательные inclusion
+
+IP
+-> nrel_carries:
+   TCP;;
+-> nrel_carries:
+   UDP;;
+-> nrel_carries:
+   DNS;;
+
+TCP
+-> nrel_carries:
+   HTTP;;
+-> nrel_carries:
+   HTTPS;;
+-> nrel_carries:
+   DNS;;
+
+UDP
+-> nrel_carries:
+   DNS;;

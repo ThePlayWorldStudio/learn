@@ -1,0 +1,9 @@
+IPv4
+<- concept_network_protocol;
+<= nrel_version:
+   IP;
+=> nrel_main_idtf:
+   [IPv4]
+   (* <- lang_ru;; *);
+=> nrel_version:
+   sc_node_const_str: 4;;

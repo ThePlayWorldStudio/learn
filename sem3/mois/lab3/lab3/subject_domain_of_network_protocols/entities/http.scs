@@ -1,0 +1,11 @@
+HTTP
+<- concept_network_protocol;
+=> nrel_main_idtf:
+   [HTTP]
+   (* <- lang_ru;; *);
+=> nrel_belongs_to_layer:
+   layer7_application;
+=> nrel_uses_transport:
+   TCP;
+=> nrel_runs_over:
+   TCP;;

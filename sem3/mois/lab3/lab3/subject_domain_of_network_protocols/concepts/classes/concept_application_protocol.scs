@@ -1,0 +1,11 @@
+concept_application_protocol
+<- concept_network_protocol;
+=> nrel_main_idtf:
+   [прикладной протокол]
+   (* <- lang_ru;; *);
+-> rrel_inclusion:
+   HTTP;
+-> rrel_inclusion:
+   HTTPS;
+-> rrel_inclusion:
+   DNS;;

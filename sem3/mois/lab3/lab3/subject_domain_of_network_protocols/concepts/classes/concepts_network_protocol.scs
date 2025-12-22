@@ -1,0 +1,5 @@
+concept_network_protocol
+<- sc_node_class;
+=> nrel_main_idtf:
+   [сетевой протокол]
+   (* <- lang_ru;; *);;

@@ -1,0 +1,9 @@
+concept_transport_protocol
+<- concept_network_protocol;
+=> nrel_main_idtf:
+   [транспортный протокол]
+   (* <- lang_ru;; *);
+-> rrel_inclusion:
+   TCP;
+-> rrel_inclusion:
+   UDP;;

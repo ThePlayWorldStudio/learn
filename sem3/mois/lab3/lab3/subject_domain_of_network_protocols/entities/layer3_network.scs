@@ -1,0 +1,7 @@
+layer3_network
+<- concept_osi_layer;
+=> nrel_main_idtf:
+   [сетевой уровень]
+   (* <- lang_ru;; *);
+=> nrel_order:
+   sc_node_const_num: 3;;

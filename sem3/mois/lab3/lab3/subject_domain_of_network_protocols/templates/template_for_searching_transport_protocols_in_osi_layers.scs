@@ -1,0 +1,38 @@
+@search_transport_protocols_in_layers_template = {
+    rrel_init_template: {
+        rrel_template: [*
+            @input_param1 = (.._layer <-_ concept_osi_layer);;
+            nrel_belongs_to_layer _-> (.._layer <=_ .._protocol);;
+            @output_param1 = (.._protocol <-_ concept_network_protocol);;
+        *];
+        rrel_template_input_params: {
+            @input_param1
+        };
+        rrel_template_output_params: {
+            @output_param1
+        }
+    } (* <- nrel_search_set_template;; *);
+    rrel_next_template: {
+        rrel_init_template: {
+            rrel_template: [*
+                @input_param1 = (.._protocol <-_ concept_network_protocol);;
+                nrel_uses_transport _-> (.._protocol _=> .._transport_protocol);;
+                @output_param1 = (.._transport_protocol <-_ concept_network_protocol);;
+            *];
+            rrel_template_input_params: {
+                @input_param1
+            };
+            rrel_template_output_params: {
+                @output_param1
+            }
+        } (* <- nrel_search_template;; *)
+    } (* <- nrel_fixed_search_strategy_template;; *)
+};;
+
+@search_transport_protocols_in_layers_template
+<- nrel_fixed_search_strategy_template;
+=> nrel_main_idtf:
+    [Шаблон поиска транспортных протоколов в уровнях OSI]
+    (*
+        <- lang_ru;;
+    *);;

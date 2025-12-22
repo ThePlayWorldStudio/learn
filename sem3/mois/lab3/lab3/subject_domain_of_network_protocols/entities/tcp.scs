@@ -1,0 +1,16 @@
+TCP
+<- concept_network_protocol;
+=> nrel_main_idtf:
+   [TCP]
+   (* <- lang_ru;; *);
+=> nrel_belongs_to_layer:
+   layer4_transport;
+=> nrel_runs_over:
+   IP;
+
+=> nrel_carries:
+   HTTP;
+=> nrel_carries:
+   HTTPS;
+=> nrel_carries:
+   DNS;;

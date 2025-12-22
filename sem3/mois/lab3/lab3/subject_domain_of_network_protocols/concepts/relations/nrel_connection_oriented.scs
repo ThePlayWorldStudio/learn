@@ -1,0 +1,9 @@
+nrel_connection_oriented
+<- sc_node_nrel;
+=> nrel_main_idtf:
+   [ориентирован на соединение*]
+   (* <- lang_ru;; *);
+=> nrel_first_domain:
+   concept_network_protocol;
+=> nrel_second_domain:
+   sc_node_const_bool;;

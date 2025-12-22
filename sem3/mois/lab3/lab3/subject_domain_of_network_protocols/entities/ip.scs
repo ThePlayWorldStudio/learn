@@ -1,0 +1,16 @@
+IP
+<- concept_network_protocol;
+=> nrel_main_idtf:
+   [IP]
+   (* <- lang_ru;; *);
+=> nrel_belongs_to_layer:
+   layer3_network;
+=> nrel_runs_over:
+   Ethernet;
+
+=> nrel_carries:
+   TCP;
+=> nrel_carries:
+   UDP;
+=> nrel_carries:
+   DNS;;

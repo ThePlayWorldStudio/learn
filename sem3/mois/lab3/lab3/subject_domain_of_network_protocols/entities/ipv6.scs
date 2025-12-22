@@ -1,0 +1,9 @@
+IPv6
+<- concept_network_protocol;
+<= nrel_version:
+   IP;
+=> nrel_main_idtf:
+   [IPv6]
+   (* <- lang_ru;; *);
+=> nrel_version:
+   sc_node_const_str: 6;;

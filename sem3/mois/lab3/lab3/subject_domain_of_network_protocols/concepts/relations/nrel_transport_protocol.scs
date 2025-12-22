@@ -1,0 +1,4 @@
+nrel_transport_protocol
+<- sc_node_nrel;
+=> nrel_subdividing:
+   nrel_uses_transport;;

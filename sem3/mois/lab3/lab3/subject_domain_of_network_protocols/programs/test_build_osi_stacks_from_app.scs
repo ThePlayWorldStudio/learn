@@ -1,0 +1,29 @@
+test_build_osi_stacks_from_app
+    => nrel_main_idtf: [Тест построения стеков OSI] (* <- lang_ru;; *);
+    <- scp_program;;
+
+test_build_osi_stacks_from_app = [*
+    <=_ nrel_decomposition_of_action:: _...
+    (*
+
+        // Тест для HTTP (ожидаем 2 стека: TCP + IPv4/IPv6 + Ethernet)
+        _-> .._test_http
+        (*
+            _-> rrel_assign:: rrel_scp_var:: rrel_fixed:: HTTP;;
+
+            <-_ call;; _-> rrel_program:: program_build_osi_stacks_from_app;;
+
+            // Проверка количества стеков = 2
+            <-_ searchElStr3;; _-> rrel_1:: .._result_stacks;; _-> rrel_3:: .._s1;; _=> nrel_then:: .._check2_http;; _=> nrel_else:: .._fail_http;;
+            _-> .._check2_http (* поиск второго *);;
+            _-> .._check_no3_http (* нет третьего → pass *);;
+
+            _-> .._pass_http (* genEl test_passed_http *);;
+            _-> .._fail_http (* genEl test_failed_http *);;
+        *);;
+
+        // Аналогично для HTTPS и DNS (для DNS — 4 стека)
+
+        <-_ return;;
+    *);;
+*];;

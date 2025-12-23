@@ -1,46 +1,161 @@
-agent_build_osi_stacks_from_app
-    <- agent_scp_program;;
+// program_build_osi_stacks_from_app.scs
+// ЗАДАЧА: Построение всех возможных стеков OSI вниз от прикладного протокола
+// ВХОД: .._app_protocol — прикладной протокол (HTTP, HTTPS, DNS)
+// ВЫХОД: .._result_stacks — множество ordered-структур стеков
+
+program_build_osi_stacks_from_app
+    => nrel_main_idtf:
+        [Программа построения всех стеков OSI от прикладного протокола] (* <- lang_ru;; *);
+        [Program to build all OSI stacks from application protocol] (* <- lang_en;; *);
     <- scp_program;;
 
-agent_build_osi_stacks_from_app = [*
+program_build_osi_stacks_from_app = [*
+    .._process
+    <-_ scp_process;
+
+    _-> rrel_1:: rrel_in:: .._app_protocol;
+    _-> rrel_2:: rrel_out:: .._result_stacks;
+
     <=_ nrel_decomposition_of_action:: _...
     (*
 
-        _-> .._find_action
+        // 1. Генерация результирующего множества (пустое по умолчанию, если ничего не добавим)
+        _-> .._init_result
+        (*
+            <-_ genEl;;
+            _-> rrel_1:: rrel_assign:: rrel_scp_var:: rrel_const:: rrel_node:: rrel_structure:: .._result_stacks;;
+
+            _=> nrel_goto:: .._find_transports;;
+        *);;
+
+        // 2. Поиск транспортных протоколов (runs_over + uses_transport)
+        _-> .._find_transports
+        (*
+            // Сначала по nrel_runs_over
+            <-_ searchSetStr5;;
+            _-> rrel_1:: rrel_fixed:: rrel_scp_const:: .._app_protocol;;
+            _-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._arc_t;;
+            _-> rrel_3:: rrel_assign:: rrel_scp_var:: rrel_const:: rrel_node:: .._transport;;
+            _-> rrel_4:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._arc2_t;;
+            _-> rrel_5:: rrel_fixed:: rrel_scp_const:: nrel_runs_over;;
+
+            _-> rrel_set_3:: rrel_assign:: rrel_scp_var:: .._transports_set;;
+
+            // Дополняем по nrel_uses_transport (если есть дубли — множество уникально)
+            <-_ searchSetStr5;;
+            _-> rrel_1:: .._app_protocol;;
+            _-> rrel_2:: .._arc_u;;
+            _-> rrel_3:: .._transport_u;;
+            _-> rrel_4:: .._arc2_u;;
+            _-> rrel_5:: nrel_uses_transport;;
+
+            _-> rrel_set_3:: .._transports_set;;  // Добавляем в то же множество
+
+            _=> nrel_then:: .._iterate_transports;;
+            _=> nrel_else:: .._return_empty;;
+        *);;
+
+        // 3. Внешний цикл по транспортам
+        _-> .._iterate_transports
+        (*
+            <-_ searchElStr3;;
+            _-> rrel_1:: .._transports_set;;
+            _-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._arc_cur_t;;
+            _-> rrel_3:: rrel_assign:: rrel_scp_var:: .._current_transport;;
+
+            _=> nrel_then:: .._find_ip;;
+            _=> nrel_else:: .._return_result;;
+        *);;
+
+        // 4. Поиск IP
+        _-> .._find_ip
         (*
             <-_ searchElStr5;;
-            _-> rrel_1:: rrel_assign:: rrel_scp_var:: .._action_node;;
-            _-> rrel_5:: action_build_osi_stacks_from_app;;
+            _-> rrel_1:: .._current_transport;;
+            _-> rrel_2:: .._arc_n;;
+            _-> rrel_3:: rrel_assign:: rrel_scp_var:: IP;;
+            _-> rrel_4:: .._arc2_n;;
+            _-> rrel_5:: nrel_runs_over;;
 
-            _=> nrel_then:: .._extract_arg;;
+            _=> nrel_then:: .._find_versions;;
+            _=> nrel_else:: .._remove_current_transport;;
         *);;
 
-        _-> .._extract_arg
+        // 5. Поиск версий IP
+        _-> .._find_versions
+        (*
+            <-_ searchSetStr5;;
+            _-> rrel_1:: IP;;
+            _-> rrel_2:: .._arc_v;;
+            _-> rrel_3:: .._version_node;;
+            _-> rrel_4:: .._arc2_v;;
+            _-> rrel_5:: nrel_version;;
+
+            _-> rrel_set_3:: rrel_assign:: rrel_scp_var:: .._versions_set;;
+
+            _=> nrel_then:: .._find_ethernet;;
+            _=> nrel_else:: .._remove_current_transport;;
+        *);;
+
+        // 6. Поиск Ethernet
+        _-> .._find_ethernet
         (*
             <-_ searchElStr5;;
-            _-> rrel_1:: .._action_node;;
-            _-> rrel_3:: rrel_assign:: rrel_scp_var:: .._app_protocol;;
-            _-> rrel_5:: rrel_1;;
+            _-> rrel_1:: IP;;
+            _-> rrel_2:: .._arc_dl;;
+            _-> rrel_3:: rrel_assign:: rrel_scp_var:: Ethernet;;
+            _-> rrel_4:: .._arc2_dl;;
+            _-> rrel_5:: nrel_runs_over;;
 
-            _=> nrel_then:: .._call_program;;
+            _=> nrel_then:: .._iterate_versions;;
+            _=> nrel_else:: .._remove_current_transport;;
         *);;
 
-        _-> .._call_program
+        // 7. Вложенный цикл по версиям + генерация стека
+        _-> .._iterate_versions
         (*
-            <-_ call;;
-            _-> rrel_program:: program_build_osi_stacks_from_app;;
+            <-_ searchElStr3;;
+            _-> rrel_1:: .._versions_set;;
+            _-> rrel_2:: rrel_assign:: rrel_scp_var:: .._arc_cur_v;;
+            _-> rrel_3:: rrel_assign:: rrel_scp_var:: .._current_version;;
 
-            _=> nrel_then:: .._generate_result;;
+            _=> nrel_then:: .._generate_stack;;
+            _=> nrel_else:: .._remove_current_transport;;
         *);;
 
-        _-> .._generate_result
+        // 8. Генерация ordered-стека
+        _-> .._generate_stack
         (*
-            <-_ genElStr5;;
-            _-> rrel_1:: .._action_node;;
-            _-> rrel_3:: .._result_stacks;;
-            _-> rrel_5:: nrel_result;;
+            <-_ genEl;;
+            _-> rrel_1:: rrel_assign:: rrel_scp_var:: rrel_node:: .._new_stack;;
 
-            <-_ return;;
+            <-_ genElStr5;; _-> rrel_1:: .._new_stack;; _-> rrel_3:: .._app_protocol;; _-> rrel_5:: rrel_1;;
+            <-_ genElStr5;; _-> rrel_1:: .._new_stack;; _-> rrel_3:: .._current_transport;; _-> rrel_5:: rrel_2;;
+            <-_ genElStr5;; _-> rrel_1:: .._new_stack;; _-> rrel_3:: .._current_version;; _-> rrel_5:: rrel_3;;
+            <-_ genElStr5;; _-> rrel_1:: .._new_stack;; _-> rrel_3:: Ethernet;; _-> rrel_5:: rrel_4;;
+
+            <-_ genElStr3;;
+            _-> rrel_1:: .._result_stacks;;
+            _-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._res_arc;;
+            _-> rrel_3:: .._new_stack;;
+
+            _=> nrel_goto:: .._remove_current_version;;
         *);;
+
+        // Очистка циклов
+        _-> .._remove_current_version
+        (*
+            <-_ eraseEl;; _-> rrel_1:: .._arc_cur_v;;
+            _=> nrel_goto:: .._iterate_versions;;
+        *);;
+
+        _-> .._remove_current_transport
+        (*
+            <-_ eraseEl;; _-> rrel_1:: .._arc_cur_t;;
+            _=> nrel_goto:: .._iterate_transports;;
+        *);;
+
+        _-> .._return_result (* <-_ return;; *);;
+        _-> .._return_empty (* <-_ return;; *);;
     *);;
 *];;

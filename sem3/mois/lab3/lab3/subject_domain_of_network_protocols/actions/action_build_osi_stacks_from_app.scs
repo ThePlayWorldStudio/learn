@@ -1,0 +1,8 @@
+// action_build_osi_stacks_from_app.scs
+// Класс действия для агента
+
+action_build_osi_stacks_from_app
+    <- action;;
+    => nrel_main_idtf:
+        [Действие построения всех стеков OSI от прикладного протокола]
+        (* <- lang_ru;; *);

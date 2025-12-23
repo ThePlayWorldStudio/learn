@@ -19,13 +19,11 @@ program_build_osi_stacks_from_app = [*
     <=_ nrel_decomposition_of_action:: _...
     (*
 
-        // 1. Генерация результирующего множества
+        // 1. Генерация результирующего множества (пустое по умолчанию, если ничего не добавим)
         _-> .._init_result
         (*
-            <-_ genElStr3;;
+            <-_ genEl;;
             _-> rrel_1:: rrel_assign:: rrel_scp_var:: rrel_const:: rrel_node:: rrel_structure:: .._result_stacks;;
-            _-> rrel_2:: rrel_fixed:: rrel_scp_const:: {};;
-            _-> rrel_3:: rrel_fixed:: rrel_scp_const:: concept_empty_set;;
 
             _=> nrel_goto:: .._find_transports;;
         *);;
@@ -33,6 +31,7 @@ program_build_osi_stacks_from_app = [*
         // 2. Поиск транспортных протоколов (runs_over + uses_transport)
         _-> .._find_transports
         (*
+            // Сначала по nrel_runs_over
             <-_ searchSetStr5;;
             _-> rrel_1:: rrel_fixed:: rrel_scp_const:: .._app_protocol;;
             _-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._arc_t;;
@@ -42,10 +41,14 @@ program_build_osi_stacks_from_app = [*
 
             _-> rrel_set_3:: rrel_assign:: rrel_scp_var:: .._transports_set;;
 
-            // Дополняем uses_transport, если не все найдены
+            // Дополняем по nrel_uses_transport (если есть дубли — множество уникально)
             <-_ searchSetStr5;;
             _-> rrel_1:: .._app_protocol;;
+            _-> rrel_2:: .._arc_u;;
+            _-> rrel_3:: .._transport_u;;
+            _-> rrel_4:: .._arc2_u;;
             _-> rrel_5:: nrel_uses_transport;;
+
             _-> rrel_set_3:: .._transports_set;;  // Добавляем в то же множество
 
             _=> nrel_then:: .._iterate_transports;;
@@ -64,12 +67,14 @@ program_build_osi_stacks_from_app = [*
             _=> nrel_else:: .._return_result;;
         *);;
 
-        // 4. Поиск IP (единственный network протокол)
+        // 4. Поиск IP
         _-> .._find_ip
         (*
             <-_ searchElStr5;;
             _-> rrel_1:: .._current_transport;;
+            _-> rrel_2:: .._arc_n;;
             _-> rrel_3:: rrel_assign:: rrel_scp_var:: IP;;
+            _-> rrel_4:: .._arc2_n;;
             _-> rrel_5:: nrel_runs_over;;
 
             _=> nrel_then:: .._find_versions;;
@@ -81,7 +86,11 @@ program_build_osi_stacks_from_app = [*
         (*
             <-_ searchSetStr5;;
             _-> rrel_1:: IP;;
+            _-> rrel_2:: .._arc_v;;
+            _-> rrel_3:: .._version_node;;
+            _-> rrel_4:: .._arc2_v;;
             _-> rrel_5:: nrel_version;;
+
             _-> rrel_set_3:: rrel_assign:: rrel_scp_var:: .._versions_set;;
 
             _=> nrel_then:: .._find_ethernet;;
@@ -93,7 +102,9 @@ program_build_osi_stacks_from_app = [*
         (*
             <-_ searchElStr5;;
             _-> rrel_1:: IP;;
+            _-> rrel_2:: .._arc_dl;;
             _-> rrel_3:: rrel_assign:: rrel_scp_var:: Ethernet;;
+            _-> rrel_4:: .._arc2_dl;;
             _-> rrel_5:: nrel_runs_over;;
 
             _=> nrel_then:: .._iterate_versions;;
@@ -112,10 +123,10 @@ program_build_osi_stacks_from_app = [*
             _=> nrel_else:: .._remove_current_transport;;
         *);;
 
-        // 8. Генерация ordered-стека и добавление в результат
+        // 8. Генерация ordered-стека
         _-> .._generate_stack
         (*
-            <-_ genElStr3;;
+            <-_ genEl;;
             _-> rrel_1:: rrel_assign:: rrel_scp_var:: rrel_node:: .._new_stack;;
 
             <-_ genElStr5;; _-> rrel_1:: .._new_stack;; _-> rrel_3:: .._app_protocol;; _-> rrel_5:: rrel_1;;
@@ -125,14 +136,24 @@ program_build_osi_stacks_from_app = [*
 
             <-_ genElStr3;;
             _-> rrel_1:: .._result_stacks;;
+            _-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._res_arc;;
             _-> rrel_3:: .._new_stack;;
 
             _=> nrel_goto:: .._remove_current_version;;
         *);;
 
         // Очистка циклов
-        _-> .._remove_current_version (* <-_ eraseEl;; _-> rrel_1:: .._arc_cur_v;; _=> nrel_goto:: .._iterate_versions;; *);;
-        _-> .._remove_current_transport (* <-_ eraseEl;; _-> rrel_1:: .._arc_cur_t;; _=> nrel_goto:: .._iterate_transports;; *);;
+        _-> .._remove_current_version
+        (*
+            <-_ eraseEl;; _-> rrel_1:: .._arc_cur_v;;
+            _=> nrel_goto:: .._iterate_versions;;
+        *);;
+
+        _-> .._remove_current_transport
+        (*
+            <-_ eraseEl;; _-> rrel_1:: .._arc_cur_t;;
+            _=> nrel_goto:: .._iterate_transports;;
+        *);;
 
         _-> .._return_result (* <-_ return;; *);;
         _-> .._return_empty (* <-_ return;; *);;

@@ -1,118 +1,118 @@
 // test_build_osi_stacks_from_app.scs
-// Simple test program for program_build_osi_stacks_from_app
-// Runs three tests: for HTTP, HTTPS, DNS
-// Generates test_passed_* or test_failed_* node
+// Simple test for program_build_osi_stacks_from_app
+// Checks if stacks are built for HTTP, HTTPS, DNS (non-empty result)
 
 test_build_osi_stacks_from_app
+    => nrel_main_idtf: [Test building OSI stacks];;
     <- scp_program;;
 
-    = [*
-        <=_ nrel_decomposition_of_action:: _...
+test_build_osi_stacks_from_app = [*
+    .._process
+    <-_ scp_process;
+
+    <=_ nrel_decomposition_of_action:: _...
+    (*
+
+        // Test HTTP
+        _-> .._test_http
         (*
+            _-> rrel_assign:: rrel_scp_var:: rrel_fixed:: HTTP;;
 
-            // TEST FOR HTTP
-            _-> .._test_http
-            (*
-                // Set input to HTTP
-                _-> rrel_assign:: rrel_scp_var:: rrel_fixed:: HTTP;;
+            <-_ call;;
+            _-> rrel_program:: program_build_osi_stacks_from_app;;
 
-                // Call main program
-                <-_ call;;
-                _-> rrel_program:: program_build_osi_stacks_from_app;;
+            <-_ searchElStr3;;
+            _-> rrel_1:: .._result_stacks;;
+            _-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._arc;;
+            _-> rrel_3:: rrel_assign:: rrel_scp_var:: .._stack;;
 
-                // Check if result is non-empty (search for at least one stack)
-                <-_ searchElStr3;;
-                _-> rrel_1:: rrel_fixed:: rrel_scp_var:: .._result_stacks;;
-                _-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._temp_arc;;
-                _-> rrel_3:: rrel_assign:: rrel_scp_var:: .._some_stack;;
-
-                _=> nrel_then:: .._pass_http;;
-                _=> nrel_else:: .._fail_http;;
-            *);;
-
-            _-> .._pass_http
-            (*
-                <-_ genEl;;
-                _-> rrel_assign:: rrel_scp_var:: test_passed_http;;
-                => nrel_main_idtf: [Test for HTTP passed];;
-
-                _=> nrel_goto:: .._test_https;;
-            *);;
-
-            _-> .._fail_http
-            (*
-                <-_ genEl;;
-                _-> rrel_assign:: rrel_scp_var:: test_failed_http;;
-                => nrel_main_idtf: [Test for HTTP failed];;
-
-                _=> nrel_goto:: .._test_https;;
-            *);;
-
-
-            // TEST FOR HTTPS (identical logic)
-            _-> .._test_https
-            (*
-                _-> rrel_assign:: rrel_scp_var:: rrel_fixed:: HTTPS;;
-
-                <-_ call;;
-                _-> rrel_program:: program_build_osi_stacks_from_app;;
-
-                <-_ searchElStr3;;
-                _-> rrel_1:: .._result_stacks;;
-                _-> rrel_3:: .._some_stack;;
-
-                _=> nrel_then:: .._pass_https;;
-                _=> nrel_else:: .._fail_https;;
-            *);;
-
-            _-> .._pass_https
-            (*
-                <-_ genEl;;
-                _-> rrel_assign:: rrel_scp_var:: test_passed_https;;
-                => nrel_main_idtf: [Test for HTTPS passed];;
-                _=> nrel_goto:: .._test_dns;;
-            *);;
-
-            _-> .._fail_https
-            (*
-                <-_ genEl;;
-                _-> rrel_assign:: rrel_scp_var:: test_failed_https;;
-                => nrel_main_idtf: [Test for HTTPS failed];;
-                _=> nrel_goto:: .._test_dns;;
-            *);;
-
-
-            // TEST FOR DNS (expect more stacks, but simple non-empty check)
-            _-> .._test_dns
-            (*
-                _-> rrel_assign:: rrel_scp_var:: rrel_fixed:: DNS;;
-
-                <-_ call;;
-                _-> rrel_program:: program_build_osi_stacks_from_app;;
-
-                <-_ searchElStr3;;
-                _-> rrel_1:: .._result_stacks;;
-                _-> rrel_3:: .._some_stack;;
-
-                _=> nrel_then:: .._pass_dns;;
-                _=> nrel_else:: .._fail_dns;;
-            *);;
-
-            _-> .._pass_dns
-            (*
-                <-_ genEl;;
-                _-> rrel_assign:: rrel_scp_var:: test_passed_dns;;
-                => nrel_main_idtf: [Test for DNS passed];;
-                <-_ return;;
-            *);;
-
-            _-> .._fail_dns
-            (*
-                <-_ genEl;;
-                _-> rrel_assign:: rrel_scp_var:: test_failed_dns;;
-                => nrel_main_idtf: [Test for DNS failed];;
-                <-_ return;;
-            *);;
-
+            _=> nrel_then:: .._pass_http;;
+            _=> nrel_else:: .._fail_http;;
         *);;
-    *];;
+
+        _-> .._pass_http
+        (*
+            <-_ genEl;;
+            _-> rrel_assign:: rrel_scp_var:: test_passed_http;;
+            => nrel_main_idtf: [Test HTTP passed];;
+
+            _=> nrel_goto:: .._test_https;;
+        *);;
+
+        _-> .._fail_http
+        (*
+            <-_ genEl;;
+            _-> rrel_assign:: rrel_scp_var:: test_failed_http;;
+            => nrel_main_idtf: [Test HTTP failed];;
+
+            _=> nrel_goto:: .._test_https;;
+        *);;
+
+
+        // Test HTTPS (same)
+        _-> .._test_https
+        (*
+            _-> rrel_assign:: rrel_scp_var:: rrel_fixed:: HTTPS;;
+
+            <-_ call;;
+            _-> rrel_program:: program_build_osi_stacks_from_app;;
+
+            <-_ searchElStr3;;
+            _-> rrel_1:: .._result_stacks;;
+            _-> rrel_3:: .._stack;;
+
+            _=> nrel_then:: .._pass_https;;
+            _=> nrel_else:: .._fail_https;;
+        *);;
+
+        _-> .._pass_https
+        (*
+            <-_ genEl;;
+            _-> rrel_assign:: rrel_scp_var:: test_passed_https;;
+            => nrel_main_idtf: [Test HTTPS passed];;
+            _=> nrel_goto:: .._test_dns;;
+        *);;
+
+        _-> .._fail_https
+        (*
+            <-_ genEl;;
+            _-> rrel_assign:: rrel_scp_var:: test_failed_https;;
+            => nrel_main_idtf: [Test HTTPS failed];;
+            _=> nrel_goto:: .._test_dns;;
+        *);;
+
+
+        // Test DNS
+        _-> .._test_dns
+        (*
+            _-> rrel_assign:: rrel_scp_var:: rrel_fixed:: DNS;;
+
+            <-_ call;;
+            _-> rrel_program:: program_build_osi_stacks_from_app;;
+
+            <-_ searchElStr3;;
+            _-> rrel_1:: .._result_stacks;;
+            _-> rrel_3:: .._stack;;
+
+            _=> nrel_then:: .._pass_dns;;
+            _=> nrel_else:: .._fail_dns;;
+        *);;
+
+        _-> .._pass_dns
+        (*
+            <-_ genEl;;
+            _-> rrel_assign:: rrel_scp_var:: test_passed_dns;;
+            => nrel_main_idtf: [Test DNS passed];;
+            <-_ return;;
+        *);;
+
+        _-> .._fail_dns
+        (*
+            <-_ genEl;;
+            _-> rrel_assign:: rrel_scp_var:: test_failed_dns;;
+            => nrel_main_idtf: [Test DNS failed];;
+            <-_ return;;
+        *);;
+
+    *);;
+*];;

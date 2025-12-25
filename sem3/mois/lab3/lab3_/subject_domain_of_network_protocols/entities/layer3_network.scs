@@ -4,4 +4,7 @@ layer3_network
    [сетевой уровень]
    (* <- lang_ru;; *);
 => nrel_order:
-   sc_node_const_num: 3;;
+   sc_node_const_num: 3;
+
+-> rrel_protocol:
+   IP;;

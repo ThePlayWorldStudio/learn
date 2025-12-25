@@ -1,0 +1,58 @@
+
+
+test_program_for_searching_carries_upper_port
+=> nrel_main_idtf:
+	[Тестовая программа поиска портов в слоях OSI]
+    (*
+        <- lang_ru;;
+    *);
+	[Test program for searching carries in OSI layers]
+    (*
+        <- lang_en;;
+    *);
+<- scp_program;
+-> rrel_key_sc_element:
+    .._process;;
+
+test_program_for_searching_carries_upper_port = [*
+.._process
+<-_ scp_process;
+
+<=_ nrel_decomposition_of_action:: _...
+(*
+	_-> rrel_1:: .._call_program_for_searching_carries_upper_port
+	(*
+		<-_ call;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_const:: program_for_searching_carries_upper_port;;
+		_-> rrel_2:: rrel_fixed:: rrel_scp_const:: .._params
+		(* 
+			_-> rrel_1:: rrel_fixed:: rrel_scp_const:: layer3_network;;
+			_-> rrel_2:: rrel_fixed:: rrel_scp_var:: .._result_carries;;
+		*);;
+		_-> rrel_3:: rrel_assign:: rrel_scp_var:: .._descriptor;;
+					
+		_=> nrel_goto:: .._wait_for_result_of_program_for_searching_carries_upper_port;;
+	*);;
+	_-> .._wait_for_result_of_program_for_searching_carries_upper_port
+	(*
+		<-_ waitReturn;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_var:: .._descriptor;;
+						
+		_=> nrel_goto:: .._print_result_carries;;
+	*);;
+	_-> .._print_result_carries
+	(*
+		<-_ printEl;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_var:: .._result_carries;;
+
+		_=> nrel_goto:: .._return;;
+	*);;
+	_-> .._return
+	(*
+		<-_ return;;
+	*);;
+*);;
+*];;

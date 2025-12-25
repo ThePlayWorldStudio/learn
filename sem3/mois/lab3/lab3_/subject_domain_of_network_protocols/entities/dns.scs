@@ -3,8 +3,6 @@ DNS
 => nrel_main_idtf:
    [DNS]
    (* => lang_ru;; *);
-=> nrel_belongs_to_layer:
-   layer7_application;
 => nrel_uses_transport:
    TCP;
 => nrel_uses_transport:
@@ -12,4 +10,7 @@ DNS
 => nrel_runs_over:
    TCP;
 => nrel_runs_over:
-   UDP;;
+   UDP;
+
+=> nrel_default_port:
+   [53];;

@@ -4,4 +4,11 @@ layer7_application
    [прикладной уровень]
    (* <- lang_ru;; *);
 => nrel_order:
-   sc_node_const_num: 7;;
+   sc_node_const_num: 7;
+
+-> rrel_protocol:
+   HTTPS;
+-> rrel_protocol:
+   HTTP;
+-> rrel_protocol:
+   DNS;;

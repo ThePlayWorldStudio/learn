@@ -1,9 +1,9 @@
-nrel_carries
+rrel_protocol
 <- sc_node_nrel;
 => nrel_main_idtf:
-   [несёт*]
+   [принадлежит к уровню*]
    (* <- lang_ru;; *);
 => nrel_first_domain:
-   concept_network_protocol;
+   concept_osi_layer;
 => nrel_second_domain:
    concept_network_protocol;;

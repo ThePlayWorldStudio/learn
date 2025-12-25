@@ -2,6 +2,4 @@ Ethernet
 <- concept_network_protocol;
 => nrel_main_idtf:
    [Ethernet]
-   (* <- lang_ru;; *);
-=> nrel_belongs_to_layer:
-   layer2_data_link;;
+   (* <- lang_ru;; *);;

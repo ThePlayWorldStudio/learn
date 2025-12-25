@@ -1,6 +1,0 @@
-// action_build_osi_stacks_from_app.scs
-// Definition of action class for the agent
-
-action_build_osi_stacks_from_app
-    <- action;;
-    => nrel_main_idtf: [Build all OSI stacks from application protocol];;

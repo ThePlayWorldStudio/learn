@@ -1,9 +1,9 @@
-nrel_belongs_to_layer
+rrel_carries
 <- sc_node_nrel;
 => nrel_main_idtf:
-   [принадлежит к уровню*]
+   [несёт*]
    (* <- lang_ru;; *);
 => nrel_first_domain:
-   concept_osi_layer;
+   concept_network_protocol;
 => nrel_second_domain:
    concept_network_protocol;;

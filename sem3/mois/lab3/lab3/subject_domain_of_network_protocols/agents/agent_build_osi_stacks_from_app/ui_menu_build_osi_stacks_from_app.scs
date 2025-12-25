@@ -1,7 +1,0 @@
-ui_menu_build_osi_stacks_from_app
-    <- ui_user_command_class_atom;;
-    => nrel_main_idtf: [Построить все стеки OSI от прикладного протокола] (* <- lang_ru;; *);
-    => ui_nrel_command_template: [*
-        action_build_osi_stacks_from_app _-> rrel_1:: .._app (* <-_ ui_arg_1;; *);
-        .._action <-_ action_initiated;;
-    *];;

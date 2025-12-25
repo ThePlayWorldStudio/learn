@@ -5,9 +5,9 @@ HTTPS
 => nrel_main_idtf:
    [HTTPS]
    (* <- lang_ru;; *);
-=> nrel_belongs_to_layer:
-   layer7_application;
 => nrel_uses_transport:
    TCP;
 => nrel_runs_over:
-   TCP;;
+   TCP;
+=> nrel_default_port:
+   [443];;

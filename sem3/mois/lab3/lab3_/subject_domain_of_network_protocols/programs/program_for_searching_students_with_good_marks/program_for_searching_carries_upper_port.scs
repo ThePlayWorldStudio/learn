@@ -1,0 +1,326 @@
+
+
+program_for_searching_carries_upper_port
+=> nrel_main_idtf:
+	[Программа поиска портов заданного слоя OSI]
+    (*
+        <- lang_ru;;
+    *);
+	[Program for searching carries upper ports in OSI layer]
+    (*
+        <- lang_en;;
+    *);
+<- scp_program;
+-> rrel_key_sc_element:
+    .._process;;
+
+program_for_searching_carries_upper_port = [*
+.._process
+<-_ scp_process;
+
+
+_-> rrel_1:: rrel_in:: .._layer; _-> rrel_2:: rrel_out:: .._result_carries; 
+
+<=_ nrel_decomposition_of_action:: _...
+(*
+	
+	_-> rrel_1:: .._generate_result_set_of_carries_with_upper_port
+	(*
+		<-_ genElStr3;;
+
+		_-> rrel_1:: rrel_assign:: rrel_scp_var:: rrel_const:: rrel_node:: rrel_structure:: .._result_carries;;
+		_-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._arc_from_result_protocols_to_class;;
+		_-> rrel_3:: rrel_fixed:: rrel_scp_const:: concept_network_protocol;;
+
+
+		_=> nrel_goto:: .._check_layer;;
+	*);;
+
+
+	_-> .._check_layer
+	(*
+		<-_ searchElStr3;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_const:: concept_osi_layer;;
+		_-> rrel_2:: rrel_assign:: rrel_const_perm_pos_arc:: rrel_scp_var:: .._arc_from_class_to_layer;;
+		_-> rrel_3:: rrel_fixed:: rrel_scp_const:: .._layer;;
+
+
+		_=> nrel_then:: .._print_that_specified_argument_is_layer;;
+
+		_=> nrel_else:: .._print_that_specified_argument_is_not_layer;;
+	*);;
+
+
+	_-> .._print_that_specified_argument_is_layer
+	(*
+		<-_ printNl;;		
+		_-> rrel_1:: rrel_fixed:: rrel_scp_const:: [Specified argument is layer];;
+
+
+		_=> nrel_goto:: .._search_layer_protocols;;
+	*);;
+
+
+	_-> .._search_layer_protocols
+	(*
+		<-_ searchSetStr5;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_const:: .._layer;;
+		_-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._arc_from_layer_to_protocol;;
+		_-> rrel_3:: rrel_assign:: rrel_scp_var:: rrel_const:: rrel_node:: .._protocol;;
+		_-> rrel_4:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._arc_to_arc_from_layer_to_protocol;;
+		_-> rrel_5:: rrel_fixed:: rrel_scp_const:: rrel_protocol;;
+	
+		_-> rrel_set_3:: rrel_assign:: rrel_scp_var:: .._found_protocols;;
+
+
+		_=> nrel_then:: .._get_next_protocol;;
+
+		_=> nrel_else:: .._print_that_all_protocols_were_iterated;;
+	*);;
+
+
+	_-> .._get_next_protocol
+	(*
+		<-_ searchElStr3;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_var:: .._found_protocols;;
+		_-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._arc_from_protocol_set_to_protocol;;
+		_-> rrel_3:: rrel_assign:: rrel_scp_var:: .._protocol;;
+
+
+		_=> nrel_then:: .._pop_protocol_from_set;;
+
+		_=> nrel_else:: .._print_that_all_protocols_were_iterated;;
+	*);;
+
+
+	_-> .._pop_protocol_from_set
+	(*
+		<-_ eraseEl;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_var:: rrel_erase:: .._arc_from_protocol_set_to_protocol;;
+
+
+		_=> nrel_goto:: .._print_that_layer_protocol_was_found;;
+	*);;
+
+	
+	_-> .._print_that_layer_protocol_was_found
+	(*
+		<-_ printNl;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_const:: [Protocol was found in specified layer];;
+
+
+		_=> nrel_goto:: .._search_protocol_carries;;
+	*);;
+
+
+	_-> .._search_protocol_carries
+	(*
+		<-_ searchSetStr5;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_var:: .._protocol;;
+		_-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._arc_from_protocol_to_carries;;
+		_-> rrel_3:: rrel_assign:: rrel_scp_var:: rrel_const:: rrel_node:: .._carries;;
+		_-> rrel_4:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._arc_to_arc_from_protocol_to_carrie;;
+		_-> rrel_5:: rrel_fixed:: rrel_scp_const:: rrel_carries;;
+	
+		_-> rrel_set_3:: rrel_assign:: rrel_scp_var:: .._found_carries;;
+
+
+		_=> nrel_then:: .._get_next_carrie;;
+	
+		_=> nrel_else:: .._get_next_protocol;;
+	*);;
+
+
+	_-> .._get_next_carrie
+	(*
+		<-_ searchElStr3;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_var:: .._found_carries;;
+		_-> rrel_2:: rrel_assign:: rrel_const_perm_pos_arc:: rrel_scp_var:: .._arc_from_carrie_set_to_carrie;;
+		_-> rrel_3:: rrel_assign:: rrel_scp_var:: .._carrie;;
+		
+
+		_=> nrel_then:: .._pop_carrie_from_set;;
+
+		_=> nrel_else:: .._print_that_all_carries_were_iterated;;
+	*);;
+
+
+	_-> .._pop_carrie_from_set
+	(*
+		<-_ eraseEl;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_var:: rrel_erase:: .._arc_from_carrie_set_to_carrie;;
+
+
+		_=> nrel_goto:: .._print_that_protocol_carrie_was_found;;
+	*);;
+
+
+	_-> .._print_that_protocol_carrie_was_found
+	(*
+		<-_ printNl;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_const:: [Carrie was found in specified protocol];;
+
+
+		_=> nrel_goto:: .._search_carrie_upper;;
+	*);;
+
+
+	_-> .._search_carrie_upper
+	(*
+		<-_ searchElStr5;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_var:: .._carrie;;
+		_-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_const:: rrel_common_arc:: .._arc_from_carrie_to_port;;
+		_-> rrel_3:: rrel_assign:: rrel_scp_var:: rrel_const:: rrel_node:: rrel_node_link:: .._port;;
+		_-> rrel_4:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._arc_to_arc_from_carrie_to_port;;
+		_-> rrel_5:: rrel_fixed:: rrel_scp_const:: nrel_default_port;;
+
+
+		_=> nrel_then:: .._print_that_port_is_found;;
+
+		_=> nrel_else:: .._print_that_port_is_not_found;;
+	*);;
+
+
+	_-> .._print_that_port_is_found
+	(*
+		<-_ printNl;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_const:: [Port is found for specified carrie];;
+
+
+		_=> nrel_goto:: .._check_carrie_port;;
+	*);;
+
+
+	_-> .._check_carrie_port
+	(*
+		<-_ ifGr;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_var:: .._port;;
+		_-> rrel_2:: rrel_fixed:: rrel_scp_const:: [443];;
+
+
+		_=> nrel_then:: .._check_carrie_class;;
+
+		_=> nrel_else:: .._get_next_carrie;;
+	*);;
+
+
+	_-> .._check_carrie_class
+	(*
+		<-_ searchSetStr3;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_const:: concept_network_protocol;;
+		_-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._arc_from_class_to_carrie;;
+		_-> rrel_3:: rrel_fixed:: rrel_scp_var:: .._carrie;;
+
+		_-> rrel_set_2:: rrel_fixed:: rrel_scp_var:: .._result_carries;;
+
+		
+		_=> nrel_goto:: .._add_carrie_to_result_carries_set;;
+	*);;
+
+
+	_-> .._add_carrie_to_result_carries_set
+	(*
+		<-_ genElStr3;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_var:: .._result_carries;;
+		_-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._arc_from_result_carries_set_to_carrie;;
+		_-> rrel_3:: rrel_fixed:: rrel_scp_var:: .._carrie;;
+
+
+		_=> nrel_goto:: .._print_that_carrie_was_added_to_result_carries_set;;
+	*);;
+
+	
+	_-> .._print_that_carrie_was_added_to_result_carries_set
+	(*
+		<-_ printNl;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_const:: [Carrie was added to result carries set];;
+
+
+		_=> nrel_goto:: .._get_next_carrie;;
+	*);;
+
+
+	_-> .._print_that_port_is_not_found
+	(*
+		<-_ printNl;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_const:: [Port is not found for specified carrie];;
+
+		// Перейти к выбору следующего студента.
+		_=> nrel_goto:: .._get_next_carrie;;
+	*);;
+
+
+	_-> .._print_that_all_carries_were_iterated
+	(*
+		<-_ printNl;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_const:: [Carries were iterated in specified protocol];;
+
+
+		_=> nrel_goto:: .._erase_found_carries_set;;
+	*);;
+
+
+	_-> .._erase_found_carries_set
+	(*
+		<-_ eraseEl;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_var:: rrel_erase:: .._found_carries;;
+
+		_=> nrel_goto:: .._get_next_protocol;;
+	*);;
+
+	_-> .._print_that_all_protocols_were_iterated
+	(*
+		<-_ printNl;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_const:: [All protocolss were iterated in specified layer];;
+
+
+		_=> nrel_goto:: .._erase_found_protocols_set;;
+	*);;
+
+
+	_-> .._erase_found_protocols_set
+	(*
+		<-_ eraseEl;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_var:: rrel_erase:: .._found_protocols;;
+
+
+		_=> nrel_goto:: .._return_result;;
+	*);;
+
+	_-> .._print_that_specified_argument_is_not_layer
+	(*
+		<-_ printNl;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_const:: [Specified argument is not layer];;
+
+
+		_=> nrel_goto:: .._return_result;;
+	*);;
+
+
+	_-> .._return_result
+	(*
+		<-_ return;;
+	*);;
+*);;
+*];;

@@ -4,4 +4,7 @@ layer2_data_link
    [канальный уровень]
    (* <- lang_ru;; *);
 => nrel_order:
-   sc_node_const_num: 2;;
+   sc_node_const_num: 2;
+
+-> rrel_protocol:
+   Ethernet;;

@@ -3,14 +3,14 @@ TCP
 => nrel_main_idtf:
    [TCP]
    (* <- lang_ru;; *);
-=> nrel_belongs_to_layer:
-   layer4_transport;
 => nrel_runs_over:
    IP;
 
-=> nrel_carries:
+-> rrel_carries:
    HTTP;
-=> nrel_carries:
+-> rrel_carries:
    HTTPS;
-=> nrel_carries:
-   DNS;;
+-> rrel_carries:
+   DNS;
+=> nrel_default_port:
+   [3306];;

@@ -4,4 +4,10 @@ layer4_transport
    [транспортный уровень]
    (* <- lang_ru;; *);
 => nrel_order:
-   sc_node_const_num: 4;;
+   sc_node_const_num: 4;
+
+-> rrel_protocol:
+   TCP;
+-> rrel_protocol:
+   UDP;;
+

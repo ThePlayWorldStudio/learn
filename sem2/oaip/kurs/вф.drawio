@@ -1,0 +1,217 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.3.1 Safari/605.1.15" version="26.2.14">
+  <diagram name="Страница — 1" id="5YNkVapKbS7vQx286vXQ">
+    <mxGraphModel dx="599" dy="485" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="917VUOrT-eRFZdqRORtY-67" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-1" target="917VUOrT-eRFZdqRORtY-66">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-1" value="Начало" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="222" y="90" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-87" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-2" target="917VUOrT-eRFZdqRORtY-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-2" value="Вводим целочисленную переменную WhatToDo" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="1">
+          <mxGeometry x="192" y="440" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-4" target="917VUOrT-eRFZdqRORtY-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-71" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-4" target="917VUOrT-eRFZdqRORtY-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-4" value="WhatToDo == 1" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="212" y="610" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-6" value="вызываем функцию&lt;div&gt;create() &amp;nbsp;и передаём&lt;/div&gt;&lt;div&gt;ей file&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="444" y="620" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-9" target="917VUOrT-eRFZdqRORtY-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-72" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-9" target="917VUOrT-eRFZdqRORtY-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-9" value="WhatToDo == 2" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="212" y="730" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-10" value="вызываем функцию&lt;div&gt;add() и передаём ей&lt;/div&gt;&lt;div&gt;file&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="443" y="740" width="171" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-12" target="917VUOrT-eRFZdqRORtY-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-73" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-12" target="917VUOrT-eRFZdqRORtY-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-12" value="WhatToDo == 3" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="212" y="850" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-13" value="вызываем функцию&lt;div&gt;edit() и передаём ей&lt;/div&gt;&lt;div&gt;file&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="443" y="860" width="171" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-43" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-14" target="917VUOrT-eRFZdqRORtY-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-14" value="создаём ссылку&lt;div&gt;на файл file&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="222" y="320" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-17" target="917VUOrT-eRFZdqRORtY-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-74" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-17" target="917VUOrT-eRFZdqRORtY-20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-17" value="WhatToDo == 4" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="212" y="970" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-18" value="вызываем функцию&lt;div&gt;delEl() &amp;nbsp;и передаём&lt;/div&gt;&lt;div&gt;ей file&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="443" y="980" width="171" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-20" target="917VUOrT-eRFZdqRORtY-21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-75" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-20" target="917VUOrT-eRFZdqRORtY-45">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-20" value="WhatToDo == 5" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="212" y="1090" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-21" value="вызываем функцию&lt;div&gt;printop() и передаём ей&lt;/div&gt;&lt;div&gt;file и WhatToDo&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="442" y="1100" width="172" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-44" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-45" target="917VUOrT-eRFZdqRORtY-46">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-76" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-45" target="917VUOrT-eRFZdqRORtY-48">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-45" value="WhatToDo == 6" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="212" y="1210" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-46" value="вызываем функцию&lt;div&gt;printop() и передаём ей&lt;/div&gt;&lt;div&gt;file и WhatToDo&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="442" y="1220" width="172" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-47" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-48" target="917VUOrT-eRFZdqRORtY-49">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-77" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-48" target="917VUOrT-eRFZdqRORtY-51">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-48" value="WhatToDo == 7" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="212" y="1330" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-49" value="вызываем функцию&lt;div&gt;printop() и передаём ей&lt;/div&gt;&lt;div&gt;file и WhatToDo&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="442" y="1340" width="172" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-50" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-51" target="917VUOrT-eRFZdqRORtY-52">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-78" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-51" target="917VUOrT-eRFZdqRORtY-54">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-51" value="WhatToDo == 8" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="212" y="1450" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-52" value="вызываем функцию&lt;div&gt;printop() и передаём ей&lt;/div&gt;&lt;div&gt;file и WhatToDo&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="442" y="1460" width="172" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-53" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-54" target="917VUOrT-eRFZdqRORtY-55">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-79" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-54" target="917VUOrT-eRFZdqRORtY-57">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-54" value="WhatToDo == 9" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="212" y="1570" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-55" value="вызываем функцию&lt;div&gt;printop() и передаём ей&lt;/div&gt;&lt;div&gt;file и WhatToDo&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="442" y="1580" width="172" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-56" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-57" target="917VUOrT-eRFZdqRORtY-58">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-80" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-57" target="917VUOrT-eRFZdqRORtY-60">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-57" value="WhatToDo == 10" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="212" y="1690" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-58" value="вызываем функцию&lt;div&gt;printop() и передаём ей&lt;/div&gt;&lt;div&gt;file и WhatToDo&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="442" y="1700" width="172" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-59" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-60" target="917VUOrT-eRFZdqRORtY-61">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-81" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-60" target="917VUOrT-eRFZdqRORtY-63">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-60" value="WhatToDo == 11" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="212" y="1810" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-61" value="вызываем функцию&lt;div&gt;dietprint() и передаём ей&lt;/div&gt;&lt;div&gt;file&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="442" y="1820" width="172" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-62" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-63" target="917VUOrT-eRFZdqRORtY-64">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-83" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-63" target="917VUOrT-eRFZdqRORtY-82">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-63" value="WhatToDo == 12" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="212" y="1930" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-64" value="isWork = false" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="442" y="1940" width="172" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-88" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-65">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="280" y="560" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="121" y="2185" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-89" value="да" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="917VUOrT-eRFZdqRORtY-88">
+          <mxGeometry x="0.7079" y="-1" relative="1" as="geometry">
+            <mxPoint y="415" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-93" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-65" target="917VUOrT-eRFZdqRORtY-92">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-94" value="Text" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="917VUOrT-eRFZdqRORtY-93">
+          <mxGeometry x="-0.1268" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-65" value="isWork == true?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="2160" width="124" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-68" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-66" target="917VUOrT-eRFZdqRORtY-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-66" value="создаём булевую&lt;div&gt;переменную isWork&lt;/div&gt;&lt;div&gt;и присваиваем ей&lt;/div&gt;&lt;div&gt;true&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="222" y="190" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-85" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-82" target="917VUOrT-eRFZdqRORtY-84">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-91" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="917VUOrT-eRFZdqRORtY-82" target="917VUOrT-eRFZdqRORtY-65">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-82" value="иначе" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="214" y="2050" width="136" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-84" value="вызываем функцию&lt;div&gt;printMessage()&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="442.5" y="2060" width="172" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="917VUOrT-eRFZdqRORtY-92" value="Конец" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="222" y="2278" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

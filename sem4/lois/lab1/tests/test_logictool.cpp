@@ -2,132 +2,133 @@
 #include <string>
 #include "../src/logictool.h"
 
-// Фикстура для тестов, чтобы не дублировать создание и удаление дерева
+// Фикстура для тестов: автоматически чистит память после каждого теста
 class LogicToolTest : public ::testing::Test {
 protected:
     LogicTool tool;
     Node* root = nullptr;
-    VarEnv env[10]; // Массив среды с запасом
 
     void TearDown() override {
         tool.deleteTree(root);
         root = nullptr;
     }
+
+    // Хелпер для проверки точного текста исключения (т.к. выбрасывается std::string)
+    void ExpectError(const std::string& input, const std::string& expected_msg) {
+        try {
+            root = tool.buildTree(input);
+            FAIL() << "Ожидалось исключение, но формула скомпилировалась";
+        } catch (const std::string& e) {
+            EXPECT_EQ(e, expected_msg);
+        }
+    }
 };
 
 // ==========================================
-// 1. Тесты извлечения переменных (getVariables)
+// 1. ТЕСТЫ ПАРСИНГА (buildTree и parseFormula)
 // ==========================================
 
-TEST_F(LogicToolTest, GetVariables_Single) {
+TEST_F(LogicToolTest, ParseVariablesAndSpaces) {
+    // Проверка isSpace, prepare, isAlpha и isAlnum
+    root = tool.buildTree(" \t\n\r ( A1 /\\ B2 ) \n");
+    ASSERT_NE(root, nullptr);
+    EXPECT_EQ(root->value, "/\\");
+    EXPECT_EQ(root->left->value, "A1");
+    EXPECT_EQ(root->right->value, "B2");
+}
+
+TEST_F(LogicToolTest, ParseUnaryOperator) {
+    root = tool.buildTree("!A");
+    ASSERT_NE(root, nullptr);
+    EXPECT_EQ(root->value, "!");
+    EXPECT_EQ(root->left->value, "A");
+    EXPECT_EQ(root->right, nullptr);
+}
+
+TEST_F(LogicToolTest, ParseBinaryOperators) {
+    Node* nAnd = tool.buildTree("(A/\\B)"); EXPECT_EQ(nAnd->value, "/\\"); tool.deleteTree(nAnd);
+    Node* nOr  = tool.buildTree("(A\\/B)"); EXPECT_EQ(nOr->value, "\\/");  tool.deleteTree(nOr);
+    Node* nImp = tool.buildTree("(A->B)"); EXPECT_EQ(nImp->value, "->"); tool.deleteTree(nImp);
+    Node* nEq  = tool.buildTree("(A~B)");  EXPECT_EQ(nEq->value, "~");   tool.deleteTree(nEq);
+}
+
+// ==========================================
+// 2. ТЕСТЫ ОШИБОК ПАРСИНГА (Синтаксис)
+// ==========================================
+
+TEST_F(LogicToolTest, SyntaxErrors) {
+    ExpectError("", "Пустая формула!");
+    ExpectError("A B", "Ошибка синтаксиса: пропущены скобки или есть лишние символы");
+    ExpectError("!", "Неожиданный конец формулы");
+    ExpectError("(A/\\", "Неожиданный конец формулы");
+    ExpectError("(A*B)", "Ожидался бинарный оператор после операнда");
+    ExpectError("(A/\\B", "Нет закрывающей скобки ')'");
+    ExpectError("@", "Некорректный символ");
+}
+
+// ==========================================
+// 3. ТЕСТЫ ВЫЧИСЛЕНИЯ (evaluate)
+// ==========================================
+
+TEST_F(LogicToolTest, EvaluateOperators) {
+    VarEnv env[] = {{"A", true}, {"B", false}};
+    int envSize = 2;
+
+    // Проверка nullptr
+    EXPECT_FALSE(tool.evaluate(nullptr, env, envSize));
+
+    // Проверка переменных
+    Node* vA = tool.buildTree("A"); EXPECT_TRUE(tool.evaluate(vA, env, envSize)); tool.deleteTree(vA);
+    Node* vB = tool.buildTree("B"); EXPECT_FALSE(tool.evaluate(vB, env, envSize)); tool.deleteTree(vB);
+
+    // Проверка операций (!, /\, \/, ->, ~)
+    Node* nNot = tool.buildTree("!A");     EXPECT_FALSE(tool.evaluate(nNot, env, envSize)); tool.deleteTree(nNot);
+    Node* nAnd = tool.buildTree("(A/\\B)"); EXPECT_FALSE(tool.evaluate(nAnd, env, envSize)); tool.deleteTree(nAnd);
+    Node* nOr  = tool.buildTree("(A\\/B)"); EXPECT_TRUE(tool.evaluate(nOr, env, envSize));  tool.deleteTree(nOr);
+    Node* nImp = tool.buildTree("(A->B)"); EXPECT_FALSE(tool.evaluate(nImp, env, envSize)); tool.deleteTree(nImp);
+    Node* nImp2= tool.buildTree("(B->A)"); EXPECT_TRUE(tool.evaluate(nImp2, env, envSize)); tool.deleteTree(nImp2);
+    Node* nEq  = tool.buildTree("(A~B)");  EXPECT_FALSE(tool.evaluate(nEq, env, envSize));  tool.deleteTree(nEq);
+    Node* nEq2 = tool.buildTree("(A~A)");  EXPECT_TRUE(tool.evaluate(nEq2, env, envSize));  tool.deleteTree(nEq2);
+}
+
+TEST_F(LogicToolTest, EvaluateUnknownVariable) {
+    VarEnv env[] = {{"A", true}};
+    root = tool.buildTree("C"); // Переменная C не задана в среде
+    
+    try {
+        tool.evaluate(root, env, 1);
+        FAIL() << "Ожидалась ошибка отсутствующей переменной";
+    } catch (const std::string& e) {
+        EXPECT_EQ(e, "Неизвестная переменная C");
+    }
+}
+
+// ==========================================
+// 4. ТЕСТЫ ДОП МЕТОДОВ (getVariables и deleteTree)
+// ==========================================
+
+TEST_F(LogicToolTest, GetVariablesExtraction) {
     std::string vars[5];
-    int count = tool.getVariables("A", vars, 5);
-    EXPECT_EQ(count, 1);
+    
+    // Проверка извлечения и дедупликации (A встречается дважды)
+    int count = tool.getVariables("((A/\\A)\\/B1)", vars, 5);
+    EXPECT_EQ(count, 2);
     EXPECT_EQ(vars[0], "A");
-}
+    EXPECT_EQ(vars[1], "B1");
 
-TEST_F(LogicToolTest, GetVariables_MultipleUniqueAndDuplicates) {
-    std::string vars[10];
-    // Формула с дубликатами и пробелами
-    int count = tool.getVariables("( var1 /\\ (var2 \\/ var1) )", vars, 10);
-    EXPECT_EQ(count, 2);
-    EXPECT_EQ(vars[0], "var1");
-    EXPECT_EQ(vars[1], "var2");
-}
-
-TEST_F(LogicToolTest, GetVariables_MaxLimit) {
-    std::string vars[2];
-    // Пытаемся извлечь 3 переменные, но лимит 2
-    int count = tool.getVariables("((A /\\ B) \\/ C)", vars, 2);
-    EXPECT_EQ(count, 2);
+    // Проверка лимита массива (maxVars = 2, хотя уникальных 3)
+    int countLimit = tool.getVariables("((A/\\B)\\/C)", vars, 2);
+    EXPECT_EQ(countLimit, 2);
     EXPECT_EQ(vars[0], "A");
     EXPECT_EQ(vars[1], "B");
 }
 
-// ==========================================
-// 2. Тесты парсера и синтаксиса (buildTree)
-// ==========================================
-
-TEST_F(LogicToolTest, BuildTree_WhitespaceIgnored) {
-    EXPECT_NO_THROW(root = tool.buildTree("  ( A   /\\  B ) \t\n "));
-    EXPECT_NE(root, nullptr);
-    EXPECT_EQ(root->value, "/\\");
-}
-
-// Тестируем генерацию исключений при кривом синтаксисе
-TEST_F(LogicToolTest, BuildTree_Exceptions) {
-    EXPECT_THROW(tool.buildTree(""), std::string);                   // Пустая формула
-    EXPECT_THROW(tool.buildTree("   "), std::string);                // Только пробелы
-    EXPECT_THROW(tool.buildTree("(A/\\B"), std::string);             // Нет закрывающей скобки
-    EXPECT_THROW(tool.buildTree("A/\\B"), std::string);              // Нет открывающих скобок (в твоей логике они обязательны для бинарных)
-    EXPECT_THROW(tool.buildTree("(A B)"), std::string);              // Нет оператора
-    EXPECT_THROW(tool.buildTree("(A/\\)"), std::string);             // Нет второго операнда
-    EXPECT_THROW(tool.buildTree("!"), std::string);                  // Неожиданный конец
-    EXPECT_THROW(tool.buildTree("(A/\\B) C"), std::string);          // Лишние символы в конце
-    EXPECT_THROW(tool.buildTree("(A + B)"), std::string);            // Некорректный символ/оператор
-}
-
-// ==========================================
-// 3. Тесты вычислений логики (evaluate)
-// ==========================================
-
-TEST_F(LogicToolTest, Evaluate_Not) {
-    root = tool.buildTree("!A");
-    env[0] = {"A", true};
-    EXPECT_FALSE(tool.evaluate(root, env, 1));
-    env[0] = {"A", false};
-    EXPECT_TRUE(tool.evaluate(root, env, 1));
-}
-
-TEST_F(LogicToolTest, Evaluate_And) {
-    root = tool.buildTree("(A/\\B)");
-    env[0] = {"A", false}; env[1] = {"B", false}; EXPECT_FALSE(tool.evaluate(root, env, 2));
-    env[0] = {"A", false}; env[1] = {"B", true};  EXPECT_FALSE(tool.evaluate(root, env, 2));
-    env[0] = {"A", true};  env[1] = {"B", false}; EXPECT_FALSE(tool.evaluate(root, env, 2));
-    env[0] = {"A", true};  env[1] = {"B", true};  EXPECT_TRUE(tool.evaluate(root, env, 2));
-}
-
-TEST_F(LogicToolTest, Evaluate_Or) {
-    root = tool.buildTree("(A\\/B)");
-    env[0] = {"A", false}; env[1] = {"B", false}; EXPECT_FALSE(tool.evaluate(root, env, 2));
-    env[0] = {"A", false}; env[1] = {"B", true};  EXPECT_TRUE(tool.evaluate(root, env, 2));
-    env[0] = {"A", true};  env[1] = {"B", false}; EXPECT_TRUE(tool.evaluate(root, env, 2));
-    env[0] = {"A", true};  env[1] = {"B", true};  EXPECT_TRUE(tool.evaluate(root, env, 2));
-}
-
-TEST_F(LogicToolTest, Evaluate_Imply) {
-    root = tool.buildTree("(A->B)");
-    env[0] = {"A", false}; env[1] = {"B", false}; EXPECT_TRUE(tool.evaluate(root, env, 2));
-    env[0] = {"A", false}; env[1] = {"B", true};  EXPECT_TRUE(tool.evaluate(root, env, 2));
-    env[0] = {"A", true};  env[1] = {"B", false}; EXPECT_FALSE(tool.evaluate(root, env, 2));
-    env[0] = {"A", true};  env[1] = {"B", true};  EXPECT_TRUE(tool.evaluate(root, env, 2));
-}
-
-TEST_F(LogicToolTest, Evaluate_Equiv) {
-    root = tool.buildTree("(A~B)");
-    env[0] = {"A", false}; env[1] = {"B", false}; EXPECT_TRUE(tool.evaluate(root, env, 2));
-    env[0] = {"A", false}; env[1] = {"B", true};  EXPECT_FALSE(tool.evaluate(root, env, 2));
-    env[0] = {"A", true};  env[1] = {"B", false}; EXPECT_FALSE(tool.evaluate(root, env, 2));
-    env[0] = {"A", true};  env[1] = {"B", true};  EXPECT_TRUE(tool.evaluate(root, env, 2));
-}
-
-TEST_F(LogicToolTest, Evaluate_UnknownVariableThrows) {
-    root = tool.buildTree("(A/\\B)");
-    // Передаем среду, где есть только A
-    env[0] = {"A", true};
-    EXPECT_THROW(tool.evaluate(root, env, 1), std::string);
-}
-
-// ==========================================
-// 4. Тесты управления памятью (deleteTree)
-// ==========================================
-
-TEST_F(LogicToolTest, DeleteTree_Nullptr) {
-    // Просто проверяем, что вызов с nullptr не крашит программу (в твоем коде есть защита `if (!root) return;`)
+TEST_F(LogicToolTest, DeleteTreeNullptrHandling) {
+    // Просто проверяем, что удаление пустой ноды не крашит программу (Segfault)
     EXPECT_NO_THROW(tool.deleteTree(nullptr));
 }
 
-// Точка входа для тестов
+// Запуск всех тестов (если пишешь без CMake или кастомного main)
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

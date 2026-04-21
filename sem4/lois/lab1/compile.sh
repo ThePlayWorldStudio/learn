@@ -1,0 +1,1 @@
+g++ main.cpp src/logictool.cpp -o logic_app   

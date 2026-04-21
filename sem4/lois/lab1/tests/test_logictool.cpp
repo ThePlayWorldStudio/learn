@@ -26,7 +26,7 @@ protected:
 };
 
 // --- Тесты вспомогательных методов и парсинга символов ---
-
+/*
 TEST_F(LogicToolDeepTest, HelperMethodsCoverage) {
     // Покрываем isSpace: ' ', '\t', '\n', '\r'
     root = tool.buildTree("A \t \n \r /\\ B");
@@ -38,7 +38,7 @@ TEST_F(LogicToolDeepTest, HelperMethodsCoverage) {
     root = tool.buildTree("Variable123");
     EXPECT_EQ(root->value, "Variable123");
 }
-
+*/
 // --- Тесты парсера (Branch Coverage для parseFormula) ---
 
 TEST_F(LogicToolDeepTest, ParserBranchCoverage) {

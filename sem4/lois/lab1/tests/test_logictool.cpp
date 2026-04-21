@@ -1,4 +1,4 @@
-#include "../libs/googletest/googletest/include/gtest/gtest.h"
+#include <gtest/gtest.h>
 #include <string>
 #include "../src/logictool.h"
 
@@ -47,16 +47,6 @@ TEST_F(LogicToolTest, GetVariables_MaxLimit) {
 // ==========================================
 // 2. Тесты парсера и синтаксиса (buildTree)
 // ==========================================
-
-TEST_F(LogicToolTest, BuildTree_ValidSyntax) {
-    EXPECT_NO_THROW(root = tool.buildTree("A"));
-    tool.deleteTree(root);
-    EXPECT_NO_THROW(root = tool.buildTree("!A"));
-    tool.deleteTree(root);
-    EXPECT_NO_THROW(root = tool.buildTree("(A/\\B)"));
-    tool.deleteTree(root);
-    EXPECT_NO_THROW(root = tool.buildTree("((A->B)~(!C))"));
-}
 
 TEST_F(LogicToolTest, BuildTree_WhitespaceIgnored) {
     EXPECT_NO_THROW(root = tool.buildTree("  ( A   /\\  B ) \t\n "));

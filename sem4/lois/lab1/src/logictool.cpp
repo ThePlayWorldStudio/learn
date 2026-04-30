@@ -55,6 +55,13 @@ Node* LogicTool::parseFormula() {
         return new Node(op, left, right);
     }
 
+    // Добавлена обработка констант 0 и 1
+    if (formula[pos] == '0' || formula[pos] == '1') {
+        std::string constVal = "";
+        constVal += formula[pos++];
+        return new Node(constVal);
+    }
+
     if (isAlpha(formula[pos])) {
         std::string varName = "";
         while (pos < (int)formula.length() && isAlnum(formula[pos])) {
@@ -69,6 +76,11 @@ Node* LogicTool::parseFormula() {
 bool LogicTool::evaluate(Node* root, const VarEnv* env, int envSize) {
     if (!root) return false;
     std::string v = root->value;
+    
+    // Добавлены проверки на константы 1 и 0
+    if (v == "1") return true;
+    if (v == "0") return false;
+    
     if (v == "~") return evaluate(root->left, env, envSize) == evaluate(root->right, env, envSize);
     if (v == "->") return !evaluate(root->left, env, envSize) || evaluate(root->right, env, envSize);
     if (v == "\\/") return evaluate(root->left, env, envSize) || evaluate(root->right, env, envSize);

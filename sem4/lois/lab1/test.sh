@@ -5,3 +5,4 @@ lcov --capture --directory . --output-file coverage.info --quiet && \
 lcov --remove coverage.info '/usr/*' '*/gtest/*' --output-file coverage.info && \
 lcov --summary coverage.info
 rm -f *.gcda && \
+rm -f *.gcno

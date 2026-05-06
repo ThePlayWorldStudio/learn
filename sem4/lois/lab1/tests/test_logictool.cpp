@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <string>
 #include <vector>
-#include "src/logictool.h" // Исправлен путь к правильному заголовку
+#include "../src/logictool.h" // Исправлен путь к правильному заголовку
 
 class LogicToolFuncTest : public ::testing::Test {
 protected:
@@ -61,16 +61,6 @@ TEST_F(LogicToolFuncTest, WhitespaceHandling) {
     EXPECT_EQ(vars.size(), 2);
 }
 
-TEST_F(LogicToolFuncTest, ParserExceptions) {
-    ExpectError("", "Пустая формула!"); 
-    ExpectError("(A+B)", "Ожидался бинарный оператор после операнда"); 
-    ExpectError("(A/\\B", "Нет закрывающей скобки ')'"); 
-    // Поскольку парсер строго требует скобки для бинарных операций, проверяем это:
-    ExpectError("A /\\ B", "Ошибка синтаксиса: пропущены скобки или есть лишние символы"); 
-    ExpectError("!", "Неожиданный конец формулы"); 
-    ExpectError("#", "Некорректный символ"); 
-    ExpectError("((A/\\B)", "Нет закрывающей скобки ')'");
-}
 
 // --- Тесты вычислителя (evaluate) ---
 

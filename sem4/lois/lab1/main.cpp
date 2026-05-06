@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <ctime>
-#include "logictool.h"
+#include "src/logictool.h"
 
 using namespace std;
 

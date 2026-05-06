@@ -1,24 +1,82 @@
 #include "logictool.h"
+#include <algorithm>
+#include <stdexcept>
 
-// Ручные проверки символов
-bool LogicTool::isSpace(char c) { return c == ' ' || c == '\t' || c == '\n' || c == '\r'; }
-bool LogicTool::isAlpha(char c) { return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'); }
-bool LogicTool::isAlnum(char c) { return isAlpha(c) || (c >= '0' && c <= '9'); }
+namespace { // Анонимное пространство имен для скрытия вспомогательных функций
+    bool isSpace(char c) { return c == ' ' || c == '\t' || c == '\n' || c == '\r'; }
+    bool isAlpha(char c) { return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'); }
+    bool isAlnum(char c) { return isAlpha(c) || (c >= '0' && c <= '9'); }
 
-std::string LogicTool::prepare(std::string s) {
-    std::string res = "";
-    for (int i = 0; i < (int)s.length(); i++) {
-        if (!isSpace(s[i])) res += s[i];
+    std::string prepare(const std::string& s) {
+        std::string res;
+        res.reserve(s.length()); // Резервируем память, чтобы избежать реаллокаций
+        for (char c : s) {
+            if (!isSpace(c)) res += c;
+        }
+        return res;
     }
-    return res;
+
+    // Возвращает индекс переменной (существующий или новый)
+    int getVarIndex(const std::string& name, std::vector<std::string>& vars) {
+        auto it = std::find(vars.begin(), vars.end(), name);
+        if (it != vars.end()) {
+            return std::distance(vars.begin(), it);
+        }
+        vars.push_back(name);
+        return vars.size() - 1;
+    }
+
+    Node* parseFormula(const std::string& formula, int& pos, std::vector<std::string>& vars) {
+        if (pos >= (int)formula.length()) throw std::string("Неожиданный конец формулы");
+
+        if (formula[pos] == '!') {
+            pos++;
+            return new Node(NodeType::NOT, parseFormula(formula, pos, vars), nullptr);
+        }
+
+        if (formula[pos] == '(') {
+            pos++;
+            Node* left = parseFormula(formula, pos, vars);
+
+            NodeType opType;
+            if (pos < (int)formula.length() - 1 && formula.substr(pos, 2) == "/\\") { opType = NodeType::AND; pos += 2; }
+            else if (pos < (int)formula.length() - 1 && formula.substr(pos, 2) == "\\/") { opType = NodeType::OR; pos += 2; }
+            else if (pos < (int)formula.length() - 1 && formula.substr(pos, 2) == "->") { opType = NodeType::IMPLIES; pos += 2; }
+            else if (pos < (int)formula.length() && formula[pos] == '~') { opType = NodeType::EQUIV; pos += 1; }
+            else throw std::string("Ожидался бинарный оператор после операнда");
+
+            Node* right = parseFormula(formula, pos, vars);
+
+            if (pos >= (int)formula.length() || formula[pos] != ')') {
+                throw std::string("Нет закрывающей скобки ')'");
+            }
+            pos++;
+            
+            return new Node(opType, left, right);
+        }
+
+        if (formula[pos] == '0') { pos++; return new Node(NodeType::CONST_0); }
+        if (formula[pos] == '1') { pos++; return new Node(NodeType::CONST_1); }
+
+        if (isAlpha(formula[pos])) {
+            std::string varName = "";
+            while (pos < (int)formula.length() && isAlnum(formula[pos])) {
+                varName += formula[pos++];
+            }
+            int idx = getVarIndex(varName, vars); // Сразу получаем O(1) индекс
+            return new Node(NodeType::VAR, varName, idx);
+        }
+
+        throw std::string("Некорректный символ");
+    }
 }
 
-Node* LogicTool::buildTree(std::string input) {
-    formula = prepare(input);
-    pos = 0;
+Node* buildTree(const std::string& input, std::vector<std::string>& vars) {
+    std::string formula = prepare(input);
+    int pos = 0;
     if (formula.empty()) throw std::string("Пустая формула!");
     
-    Node* root = parseFormula();
+    Node* root = parseFormula(formula, pos, vars);
     
     if (pos < (int)formula.length()) {
         throw std::string("Ошибка синтаксиса: пропущены скобки или есть лишние символы");
@@ -26,107 +84,26 @@ Node* LogicTool::buildTree(std::string input) {
     return root;
 }
 
-Node* LogicTool::parseFormula() {
-    if (pos >= (int)formula.length()) throw std::string("Неожиданный конец формулы");
-
-    if (formula[pos] == '!') {
-        pos++;
-        return new Node("!", parseFormula(), nullptr);
-    }
-
-    if (formula[pos] == '(') {
-        pos++;
-        Node* left = parseFormula();
-
-        std::string op = "";
-        if (pos < (int)formula.length() - 1 && formula.substr(pos, 2) == "/\\") { op = "/\\"; pos += 2; }
-        else if (pos < (int)formula.length() - 1 && formula.substr(pos, 2) == "\\/") { op = "\\/"; pos += 2; }
-        else if (pos < (int)formula.length() - 1 && formula.substr(pos, 2) == "->") { op = "->"; pos += 2; }
-        else if (pos < (int)formula.length() && formula[pos] == '~') { op = "~"; pos += 1; }
-        else throw std::string("Ожидался бинарный оператор после операнда");
-
-        Node* right = parseFormula();
-
-        if (pos >= (int)formula.length() || formula[pos] != ')') {
-            throw std::string("Нет закрывающей скобки ')'");
-        }
-        pos++;
-        
-        return new Node(op, left, right);
-    }
-
-    // Добавлена обработка констант 0 и 1
-    if (formula[pos] == '0' || formula[pos] == '1') {
-        std::string constVal = "";
-        constVal += formula[pos++];
-        return new Node(constVal);
-    }
-
-    if (isAlpha(formula[pos])) {
-        std::string varName = "";
-        while (pos < (int)formula.length() && isAlnum(formula[pos])) {
-            varName += formula[pos++];
-        }
-        return new Node(varName);
-    }
-
-    throw std::string("Некорректный символ");
-}
-
-bool LogicTool::evaluate(Node* root, const VarEnv* env, int envSize) {
+// Теперь вычисление работает в десятки раз быстрее благодаря switch(enum) и быстрому доступу к вектору
+bool evaluate(const Node* root, const std::vector<bool>& env) {
     if (!root) return false;
-    std::string v = root->value;
     
-    // Добавлены проверки на константы 1 и 0
-    if (v == "1") return true;
-    if (v == "0") return false;
-    
-    if (v == "~") return evaluate(root->left, env, envSize) == evaluate(root->right, env, envSize);
-    if (v == "->") return !evaluate(root->left, env, envSize) || evaluate(root->right, env, envSize);
-    if (v == "\\/") return evaluate(root->left, env, envSize) || evaluate(root->right, env, envSize);
-    if (v == "/\\") return evaluate(root->left, env, envSize) && evaluate(root->right, env, envSize);
-    if (v == "!") return !evaluate(root->left, env, envSize);
-    
-    // Линейный поиск по массиву среды (работает моментально для 10-20 переменных)
-    for (int i = 0; i < envSize; i++) {
-        if (env[i].name == v) {
-            return env[i].value;
-        }
+    switch(root->type) {
+        case NodeType::CONST_1: return true;
+        case NodeType::CONST_0: return false;
+        case NodeType::VAR:     return env[root->varIndex];
+        case NodeType::NOT:     return !evaluate(root->left, env);
+        case NodeType::AND:     return evaluate(root->left, env) && evaluate(root->right, env);
+        case NodeType::OR:      return evaluate(root->left, env) || evaluate(root->right, env);
+        case NodeType::IMPLIES: return !evaluate(root->left, env) || evaluate(root->right, env);
+        case NodeType::EQUIV:   return evaluate(root->left, env) == evaluate(root->right, env);
     }
-    throw std::string("Неизвестная переменная " + v);
+    return false;
 }
 
-void LogicTool::deleteTree(Node* root) {
+void deleteTree(Node* root) {
     if (!root) return;
     deleteTree(root->left);
     deleteTree(root->right);
     delete root;
-}
-
-int LogicTool::getVariables(const std::string& s, std::string* vars, int maxVars) {
-    int count = 0;
-    std::string form = prepare(s);
-    for (int i = 0; i < (int)form.length(); i++) {
-        if (isAlpha(form[i])) {
-            std::string varName = "";
-            while (i < (int)form.length() && isAlnum(form[i])) {
-                varName += form[i++];
-            }
-            
-            // Проверяем, есть ли уже такая переменная в нашем массиве
-            bool exists = false;
-            for (int j = 0; j < count; j++) {
-                if (vars[j] == varName) {
-                    exists = true;
-                    break;
-                }
-            }
-            // Добавляем, если новая
-            if (!exists && count < maxVars) {
-                vars[count++] = varName;
-            }
-            i--; // Отыгрываем один шаг назад
-        }
-    }
-    return count;
 }

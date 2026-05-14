@@ -2,21 +2,21 @@
 #include <algorithm>
 #include <stdexcept>
 
-namespace { // Анонимное пространство имен для скрытия вспомогательных функций
+namespace {  
     bool isSpace(char c) { return c == ' ' || c == '\t' || c == '\n' || c == '\r'; }
     bool isAlpha(char c) { return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'); }
     bool isAlnum(char c) { return isAlpha(c) || (c >= '0' && c <= '9'); }
 
     std::string prepare(const std::string& s) {
         std::string res;
-        res.reserve(s.length()); // Резервируем память, чтобы избежать реаллокаций
+        res.reserve(s.length());  
         for (char c : s) {
             if (!isSpace(c)) res += c;
         }
         return res;
     }
 
-    // Возвращает индекс переменной (существующий или новый)
+     
     int getVarIndex(const std::string& name, std::vector<std::string>& vars) {
         auto it = std::find(vars.begin(), vars.end(), name);
         if (it != vars.end()) {
@@ -63,7 +63,7 @@ namespace { // Анонимное пространство имен для ск�
             while (pos < (int)formula.length() && isAlnum(formula[pos])) {
                 varName += formula[pos++];
             }
-            int idx = getVarIndex(varName, vars); // Сразу получаем O(1) индекс
+            int idx = getVarIndex(varName, vars);  
             return new Node(NodeType::VAR, varName, idx);
         }
 
@@ -84,7 +84,7 @@ Node* buildTree(const std::string& input, std::vector<std::string>& vars) {
     return root;
 }
 
-// Теперь вычисление работает в десятки раз быстрее благодаря switch(enum) и быстрому доступу к вектору
+ 
 bool evaluate(const Node* root, const std::vector<bool>& env) {
     if (!root) return false;
     
